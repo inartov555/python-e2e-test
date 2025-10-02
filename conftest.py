@@ -54,8 +54,13 @@ def add_loggers(request):
 
 
 def pytest_addoption(parser):
-    parser.addoption("--has-auth", action="store_true", default=False,
-                     help="Enable tests that require auth")
+    parser.addoption("--url", action="store_true", default="https://www.instagram.com/",
+                     help="Default URL")
+
+
+def get_url():
+    url = pytestconfig.getoption("--url")
+    return url
 
 
 def pytest_collection_modifyitems(session, config, items):

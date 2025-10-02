@@ -1,9 +1,13 @@
 from __future__ import annotations
 from typing import Optional
+
 from playwright.sync_api import Page, Locator, expect
 
+from ..conftest import get_url
+
+
 class BasePage:
-    url: str = "/"
+    url: str = get_url()
 
     def __init__(self, page: Page):
         self.page = page
