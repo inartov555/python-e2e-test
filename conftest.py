@@ -4,7 +4,6 @@ from datetime import datetime
 import pytest
 from playwright.sync_api import Page
 
-from src.core.config_custom import config_custom
 from src.pages.public.landing_page import LandingPage
 from src.pages.public.login_page import LoginPage
 from src.pages.public.signup_page import SignupPage
@@ -16,9 +15,43 @@ log = Logger(__name__)
 
 @pytest.fixture(autouse=True, scope="class")
 def setup_elements_for_test(request):
-    request.cls.landing_page = LandingPage(Page)
-    request.cls.signup_page = SignupPage(Page)
-    request.cls.login_page = LoginPage(Page)
+    request.cls.landing_page = LandingPage(Page, request)
+    request.cls.signup_page = SignupPage(Page, request)
+    request.cls.login_page = LoginPage(Page, request)
+
+
+def pytest_addoption(parser):
+    parser.addoption("--base-url", action="store", default="https://www.instagram.com", help="Base URL for the site")
+    parser.addoption("--headless", action="store", default="false", help="Run headless browser (true/false)")
+    parser.addoption("--viewport-width", action="store", default="1920", help="Browser window width")
+    parser.addoption("--viewport-height", action="store", default="1080", help="Browser widndow height")
+
+
+@pytest.fixture(scope="session")
+def get_passed_params(pytestconfig):
+    """
+    How to add a new parameter:
+        1. Get param value using pytestconfig.getoption("--param_name")
+        2. Add param to the passed_params obj using setattr(passed_params, "param_name", param_name)
+    """
+
+    class PassedParams:
+        def has_auth(self) -> bool:
+            return bool(self.storage_state and os.path.exists(self.storage_state))
+
+    passed_params = PassedParams()
+
+    base_url = pytestconfig.getoption("--base-url")
+    setattr(passed_params, "base_url", base_url)
+    headless = pytestconfig.getoption("--headless").lower() == "true"
+    setattr(passed_params, "headless", headless)
+    viewport_width = pytestconfig.getoption("--viewport-width")
+    setattr(passed_params, "viewport_width", viewport_width)
+    viewport_height = pytestconfig.getoption("--viewport-height")
+    setattr(passed_params, "viewport_height", viewport_height)
+
+    return passed_params
+    
 
 
 def timestamped_path(file_name, file_ext, path_to_file=os.getenv("HOST_ARTIFACTS")):
@@ -53,8 +86,8 @@ def add_loggers(request):
     log.info("Test's logs will be stored: '{}'".format(log_file))
 
 
-def pytest_collection_modifyitems(session, config, items):
-    if not config_custom.has_auth:
+def pytest_collection_modifyitems(session, config, items, get_passed_params):
+    if not get_passed_params.has_auth:
         skip_marker = pytest.mark.skip(reason="No STORAGE_STATE provided; skipping auth tests.")
         for item in items:
             if 'auth' in getattr(item, 'keywords', {}):

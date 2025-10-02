@@ -2,6 +2,7 @@ from __future__ import annotations
 from playwright.sync_api import Locator, expect
 from ..base_page import BasePage
 
+
 class LoginPage(BasePage):
     url = "/accounts/login/"
 
