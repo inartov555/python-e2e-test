@@ -8,6 +8,7 @@ from src.pages.public.landing_page import LandingPage
 from src.pages.public.login_page import LoginPage
 from src.pages.public.signup_page import SignupPage
 from src.pages.private.home_feed_page import HomeFeedPage
+from src.core.config_custom import ConfigCustom
 from tools.logger.logger import Logger
 
 
@@ -29,32 +30,22 @@ def pytest_addoption(parser):
 
 
 @pytest.fixture(scope="session")
-def get_passed_params(request):
+def retrieve_custom_config(request):
     """
     How to add a new parameter:
         1. Get param value using pytestconfig.getoption("--param_name")
         2. Add param to the passed_params obj using setattr(passed_params, "param_name", param_name)
+
+    It forms ConfigCustom class
     """
-
-    class PassedParams:
-        storage_state: str | None = os.getenv("STORAGE_STATE") or None
-
-        def has_auth(self) -> bool:
-            return bool(self.storage_state and os.path.exists(self.storage_state))
-
-    passed_params = PassedParams()
-
-    base_url = request.config.getoption("--base-url", "https://www.instagram.com")
-    setattr(passed_params, "base_url", base_url)
+    base_url = request.config.getoption("--base-url", default="https://www.instagram.com")
+    setattr(ConfigCustom, "base_url", base_url)
     headless = request.config.getoption("--headless").lower() == "true"
-    setattr(passed_params, "headless", headless)
+    setattr(ConfigCustom, "headless", headless)
     viewport_width = request.config.getoption("--viewport-width")
-    setattr(passed_params, "viewport_width", viewport_width)
+    setattr(ConfigCustom, "viewport_width", viewport_width)
     viewport_height = request.config.getoption("--viewport-height")
-    setattr(passed_params, "viewport_height", viewport_height)
-
-    return passed_params
-    
+    setattr(ConfigCustom, "viewport_height", viewport_height)
 
 
 def timestamped_path(file_name, file_ext, path_to_file=os.getenv("HOST_ARTIFACTS")):

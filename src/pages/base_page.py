@@ -10,7 +10,7 @@ class BasePage:
         self.url = request.getfixturevalue("get_passed_params").base_url
 
     def open(self) -> "BasePage":
-        raise AssertionError(f"\n\n\n {self.url} \n\n\n")
+        print(f"\n\n\n {self.url} \n\n\n")
         self.page.goto(self.url)
         return self
 
