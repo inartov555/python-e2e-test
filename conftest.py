@@ -10,6 +10,9 @@ from src.pages.public.login_page import LoginPage
 from src.pages.public.signup_page import SignupPage
 
 
+log = Logger(__name__)
+
+
 @pytest.fixture(autouse=True, scope="class")
 def setup_elements_for_test(request):
     request.cls.landing_page = LandingPage(Page)
