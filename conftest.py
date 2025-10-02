@@ -40,7 +40,7 @@ def retrieve_custom_config(pytestconfig):
     setattr(custom_config, "viewport_height", viewport_height)
 
 
-@pytest.fixture(autouse=True, scope="class")
+@pytest.fixture(autouse=True)
 def setup_elements_for_test(request, page):
     request.cls.custom_config = CustomConfig()
     request.cls.landing_page = LandingPage(request.cls.custom_config.base_url, page, request)
