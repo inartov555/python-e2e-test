@@ -1,6 +1,6 @@
-from src.pages.public.landing_page import LandingPage
-from src.pages.public.login_page import LoginPage
-from src.pages.public.signup_page import SignupPage
+import pytest
+
+from tools.logger.logger import Logger
 
 
 class TestPublicPages:

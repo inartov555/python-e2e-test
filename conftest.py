@@ -1,10 +1,37 @@
 import pytest
+from playwright.sync_api import Page
+
 from src.core.config_custom import config_custom
+
+
+
+
+
+@pytest.fixture(autouse=True, scope="session")
+def add_loggers(request):
+    """
+    The fixture to configure loggers
+    It uses built-in pytest arguments to configure loggigng level and files
+
+    Parameters:
+        log_level or --log-level general log level for capturing
+        log_file_level or --log-file-level  level of log to be stored to a file. Usually lower than general log
+        log_file or --log-file  path where logs will be saved
+    """
+    artifacts_folder_default = os.getenv("HOST_ARTIFACTS")
+    log_level = "DEBUG"
+    log_file_level = "DEBUG"
+    log_file = os.path.join(timestamped_path("pytest", "log", artifacts_folder_default))
+    log.setup_cli_handler(level=log_level)
+    log.setup_filehandler(level=log_file_level, file_name=log_file)
+    log.info("General loglevel: '{}', File: '{}'".format(log_level, log_file_level))
+    log.info("Test's logs will be stored: '{}'".format(log_file))
 
 
 def pytest_addoption(parser):
     parser.addoption("--has-auth", action="store_true", default=False,
                      help="Enable tests that require auth")
+
 
 def pytest_collection_modifyitems(session, config, items):
     if not config_custom.has_auth:

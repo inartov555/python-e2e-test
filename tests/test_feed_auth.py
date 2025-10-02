@@ -1,5 +1,6 @@
 import pytest
-from src.pages.private.home_feed_page import HomeFeedPage
+
+from tools.logger.logger import Logger
 
 
 class TestFeedAuth:
