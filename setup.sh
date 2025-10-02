@@ -4,8 +4,8 @@
 #   - $1: the path to the project including the project folder name, defaults to $DEFAULT_REPO_PATH
 # Exported variables: HOST_ARTIFACTS, ROOT_VENV, TEST_VENV, COPIED_PROJECT_PATH
 
-DEFAULT_PROJECT_NAME="python-e2e-test"
-DEFAULT_REPO_PATH="$HOME/$DEFAULT_PROJECT_NAME"
+ARTIFACTS_ROOT_FOLDER="TEST1"
+DEFAULT_REPO_PATH="$HOME/python-e2e-test"
 
 # Repo path defaults to $DEFAULT_REPO_PATH
 if [[ -z "$1" ]]; then
@@ -19,20 +19,19 @@ elif [[ ! -d "$1" ]]; then
   echo "ERROR: Provided path $1 for the repo does not exist"
   return 1
 else
-  if [[ "${1: -1}" == "/" ]]; then
-    REPO="$1$DEFAULT_PROJECT_NAME"
-  else
-    REPO="$1/$DEFAULT_PROJECT_NAME"
-  fi
+  REPO="$1"
   echo "Using $REPO path for the repo"
 fi
 
+# Let's retrieve the project folder name from the path to the project
+PROJECT_FOLDER_NAME="${REPO##*/}"
+
 # path where workspace will be stored
-HOST_WORKSPACE="$HOME/TEST1/workspace"
+HOST_WORKSPACE="$HOME/$ARTIFACTS_ROOT_FOLDER/workspace"
 # path where artifacts will be stored
 HOST_ARTIFACTS="$HOST_WORKSPACE/artifact"
 export HOST_ARTIFACTS="$HOST_ARTIFACTS"
-export COPIED_PROJECT_PATH="$HOST_WORKSPACE/$DEFAULT_PROJECT_NAME"
+export COPIED_PROJECT_PATH="$HOST_WORKSPACE/$PROJECT_FOLDER_NAME"
 
 echo "Host workspace directory (copied project + logs, screenshots, etc.):"
 echo "  >>> $HOST_WORKSPACE"
@@ -53,12 +52,12 @@ cd "$COPIED_PROJECT_PATH"
 
 echo "Root env set up to: $(pwd)"
 export ROOT_VENV="$COPIED_PROJECT_PATH"
-echo "Entering the '$COPIED_PROJECT_PATH/$1' module"
-cd "$1"
+echo "Entering the '$COPIED_PROJECT_PATH' module"
+cd "$COPIED_PROJECT_PATH"
 
 # Activating venv
 
-MODULE_PATH="$ROOT_VENV/$1"
+MODULE_PATH="$ROOT_VENV"
 cd "$MODULE_PATH"
 
 if python3 -m venv --help > /dev/null 2>&1; then
