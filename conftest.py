@@ -2,7 +2,6 @@ import os
 from datetime import datetime
 
 import pytest
-from playwright.sync_api import Page
 
 from src.pages.public.landing_page import LandingPage
 from src.pages.public.login_page import LoginPage
@@ -28,7 +27,7 @@ def retrieve_custom_config(pytestconfig):
         1. Get param value using pytestconfig.getoption("--param_name")
         2. Add param to the passed_params obj using setattr(passed_params, "param_name", param_name)
 
-    It forms ConfigCustom class
+    It forms CustomConfig class
     """
     custom_config = CustomConfig()
     base_url = pytestconfig.getoption("--base-url", default="https://www.instagram.com")
@@ -44,10 +43,10 @@ def retrieve_custom_config(pytestconfig):
 @pytest.fixture(autouse=True, scope="class")
 def setup_elements_for_test(request):
     request.cls.custom_config = CustomConfig()
-    request.cls.landing_page = LandingPage(request.cls.custom_config.base_url, Page, request)
-    request.cls.signup_page = SignupPage(request.cls.custom_config.base_url, Page, request)
-    request.cls.login_page = LoginPage(request.cls.custom_config.base_url, Page, request)
-    request.cls.home_page = HomeFeedPage(request.cls.custom_config.base_url, Page, request)
+    request.cls.landing_page = LandingPage(request.cls.custom_config.base_url, page, request)
+    request.cls.signup_page = SignupPage(request.cls.custom_config.base_url, page, request)
+    request.cls.login_page = LoginPage(request.cls.custom_config.base_url, page, request)
+    request.cls.home_page = HomeFeedPage(request.cls.custom_config.base_url, page, request)
 
 
 def timestamped_path(file_name, file_ext, path_to_file=os.getenv("HOST_ARTIFACTS")):
