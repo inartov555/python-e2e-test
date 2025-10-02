@@ -4,7 +4,8 @@ from ..base_page import BasePage
 
 
 class SignupPage(BasePage):
-    url = "/accounts/emailsignup/"
+    def __init__(self):
+        self.url = self.url + "/accounts/emailsignup/"
 
     @property
     def email_or_phone(self) -> Locator:

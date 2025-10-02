@@ -4,7 +4,8 @@ from ..base_page import BasePage
 
 
 class LandingPage(BasePage):
-    url = "/"
+    def __init__(self):
+        self.url = self.url + "/"
 
     @property
     def signup_link(self) -> Locator:

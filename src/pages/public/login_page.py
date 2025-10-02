@@ -4,7 +4,8 @@ from ..base_page import BasePage
 
 
 class LoginPage(BasePage):
-    url = "/accounts/login/"
+    def __init__(self):
+        self.url = self.url + "/accounts/login/"
 
     @property
     def username_input(self) -> Locator:

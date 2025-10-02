@@ -7,6 +7,7 @@ from playwright.sync_api import Page
 from src.pages.public.landing_page import LandingPage
 from src.pages.public.login_page import LoginPage
 from src.pages.public.signup_page import SignupPage
+from src.pages.private.home_feed_page import HomeFeedPage
 from tools.logger.logger import Logger
 
 
@@ -18,6 +19,7 @@ def setup_elements_for_test(request):
     request.cls.landing_page = LandingPage(Page, request)
     request.cls.signup_page = SignupPage(Page, request)
     request.cls.login_page = LoginPage(Page, request)
+    request.cls.home_page = HomeFeedPage(Page, request)
 
 
 def pytest_addoption(parser):
