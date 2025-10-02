@@ -4,7 +4,8 @@ from ..base_page import BasePage
 
 
 class LandingPage(BasePage):
-    def __init__(self):
+    def __init__(self, page: Page, request):
+        super().__init__(page, request)
         self.url = self.url + "/"
 
     @property
