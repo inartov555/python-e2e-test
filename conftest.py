@@ -8,6 +8,7 @@ from src.core.config_custom import config_custom
 from src.pages.public.landing_page import LandingPage
 from src.pages.public.login_page import LoginPage
 from src.pages.public.signup_page import SignupPage
+from tools.logger.logger import Logger
 
 
 log = Logger(__name__)
