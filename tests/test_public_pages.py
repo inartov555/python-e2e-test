@@ -5,21 +5,21 @@ from tools.logger.logger import Logger
 
 class TestPublicPages:
 
-    def test_landing_links_present(page):
+    def test_landing_links_present(self):
         self.landing_page.open()
         self.landing_page.expect_loaded()
 
-    def test_navigate_to_login(page):
+    def test_navigate_to_login(self):
         self.landing_page.open()
         self.landing_page.go_to_login()
         self.login_page.expect_loaded()
 
-    def test_navigate_to_signup(page):
+    def test_navigate_to_signup(self):
         self.landing_page.open()
         self.landing_page.go_to_signup()
         self.signup_page.expect_loaded()
 
-    def test_login_negative_incorrect_creds(page):
+    def test_login_negative_incorrect_creds(self):
         self.login_page.open()
         self.login_page.expect_loaded()
         self.login_page.login("incorrect_user@example.com", "wrong_password")
