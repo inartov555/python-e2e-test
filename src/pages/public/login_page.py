@@ -4,8 +4,8 @@ from ..base_page import BasePage
 
 
 class LoginPage(BasePage):
-    def __init__(self, page: Page, request):
-        super().__init__(page, request)
+    def __init__(self, url: str, page: Page, request):
+        super().__init__(url, page, request)
         self.url = self.url + "/accounts/login/"
 
     @property
