@@ -21,14 +21,13 @@ def setup_elements_for_test(request):
 
 
 def pytest_addoption(parser):
-    parser.addoption("--base-url", action="store", default="https://www.instagram.com", help="Base URL for the site")
     parser.addoption("--headless", action="store", default="false", help="Run headless browser (true/false)")
     parser.addoption("--viewport-width", action="store", default="1920", help="Browser window width")
     parser.addoption("--viewport-height", action="store", default="1080", help="Browser widndow height")
 
 
 @pytest.fixture(scope="session")
-def get_passed_params(pytestconfig):
+def get_passed_params(request):
     """
     How to add a new parameter:
         1. Get param value using pytestconfig.getoption("--param_name")
@@ -36,18 +35,20 @@ def get_passed_params(pytestconfig):
     """
 
     class PassedParams:
+        storage_state: str | None = os.getenv("STORAGE_STATE") or None
+
         def has_auth(self) -> bool:
             return bool(self.storage_state and os.path.exists(self.storage_state))
 
     passed_params = PassedParams()
 
-    base_url = pytestconfig.getoption("--base-url")
+    base_url = request.config.getoption("--base-url", "https://www.instagram.com")
     setattr(passed_params, "base_url", base_url)
-    headless = pytestconfig.getoption("--headless").lower() == "true"
+    headless = request.config.getoption("--headless").lower() == "true"
     setattr(passed_params, "headless", headless)
-    viewport_width = pytestconfig.getoption("--viewport-width")
+    viewport_width = request.config.getoption("--viewport-width")
     setattr(passed_params, "viewport_width", viewport_width)
-    viewport_height = pytestconfig.getoption("--viewport-height")
+    viewport_height = request.config.getoption("--viewport-height")
     setattr(passed_params, "viewport_height", viewport_height)
 
     return passed_params
@@ -84,11 +85,3 @@ def add_loggers(request):
     log.setup_filehandler(level=log_file_level, file_name=log_file)
     log.info("General loglevel: '{}', File: '{}'".format(log_level, log_file_level))
     log.info("Test's logs will be stored: '{}'".format(log_file))
-
-
-def pytest_collection_modifyitems(session, config, items, get_passed_params):
-    if not get_passed_params.has_auth:
-        skip_marker = pytest.mark.skip(reason="No STORAGE_STATE provided; skipping auth tests.")
-        for item in items:
-            if 'auth' in getattr(item, 'keywords', {}):
-                item.add_marker(skip_marker)
