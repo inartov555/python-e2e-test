@@ -1,12 +1,11 @@
 #!/bin/bash
 
 # Input parameters:
-#   - $1: the module name to run tests, currently supported (api, web)
-#   - $2: the path to the project ( !!! excluding the project folder name !!! ), defaults to $DEFAULT_REPO_PATH
+#   - $1: the path to the project including the project folder name, defaults to $DEFAULT_REPO_PATH
 # Exported variables in the setup.sh file: HOST_ARTIFACTS, ROOT_VENV, TEST_VENV, COPIED_PROJECT_PATH
 
 ORIGINAL_PROJECT_PATH="$(pwd)"
-eval source ./setup.sh "$1" "$2"
+eval source ./setup.sh "$1"
 if [[ $? -ne 0 ]]; then
   return 1
 fi

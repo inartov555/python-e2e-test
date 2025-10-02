@@ -1,34 +1,28 @@
 #!/bin/bash
 
 # Input parameters:
-#   - $1: the module name to run tests, currently supported (api, web)
-#   - $2: the path to the project ( !!! excluding the project folder name !!! ), defaults to $DEFAULT_REPO_PATH
+#   - $1: the path to the project including the project folder name, defaults to $DEFAULT_REPO_PATH
 # Exported variables: HOST_ARTIFACTS, ROOT_VENV, TEST_VENV, COPIED_PROJECT_PATH
 
-if [ -z $1 ]; then
-  echo "ERROR: module name must be set to run the tests"
-  return 1
-fi
-
-DEFAULT_PROJECT_NAME="python-automation-home-test"
+DEFAULT_PROJECT_NAME="python-e2e-test"
 DEFAULT_REPO_PATH="$HOME/$DEFAULT_PROJECT_NAME"
 
 # Repo path defaults to $DEFAULT_REPO_PATH
-if [[ -z "$2" ]]; then
+if [[ -z "$1" ]]; then
   echo "WARNING: no path passed for the project, defaulting to $DEFAULT_REPO_PATH"
   REPO="$DEFAULT_REPO_PATH"
   if [[ ! -d "$REPO" ]]; then
     echo "ERROR: Default path $DEFAULT_REPO_PATH for the repo does not exist"
     return 1
   fi
-elif [[ ! -d "$2" ]]; then
-  echo "ERROR: Provided path $2 for the repo does not exist"
+elif [[ ! -d "$1" ]]; then
+  echo "ERROR: Provided path $1 for the repo does not exist"
   return 1
 else
-  if [[ "${2: -1}" == "/" ]]; then
-    REPO="$2$DEFAULT_PROJECT_NAME"
+  if [[ "${1: -1}" == "/" ]]; then
+    REPO="$1$DEFAULT_PROJECT_NAME"
   else
-    REPO="$2/$DEFAULT_PROJECT_NAME"
+    REPO="$1/$DEFAULT_PROJECT_NAME"
   fi
   echo "Using $REPO path for the repo"
 fi
