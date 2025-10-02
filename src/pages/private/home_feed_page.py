@@ -1,0 +1,21 @@
+from __future__ import annotations
+from playwright.sync_api import expect
+from ..base_page import BasePage
+from ...components.post_card import PostCard
+
+class HomeFeedPage(BasePage):
+    url = "/"
+
+    @property
+    def first_post(self) -> PostCard:
+        root = self.page.locator('article').first
+        return PostCard(root)
+
+    @property
+    def posts(self) -> list[PostCard]:
+        roots = self.page.locator('article')
+        count = roots.count()
+        return [PostCard(roots.nth(i)) for i in range(count)]
+
+    def expect_feed_visible(self) -> None:
+        expect(self.page.locator('article').first).to_be_visible()

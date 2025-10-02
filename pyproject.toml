@@ -1,0 +1,9 @@
+[tool.pytest.ini_options]
+addopts = "-q -ra --disable-warnings"
+testpaths = ["tests"]
+markers = [
+    "auth: tests that require authenticated session",
+]
+
+[tool.black]
+line-length = 100
