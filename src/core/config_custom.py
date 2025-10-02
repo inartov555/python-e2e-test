@@ -16,4 +16,4 @@ class CustomConfig(metaclass=Singleton):
     def has_auth(self) -> bool:
         return bool(self.storage_state and os.path.exists(self.storage_state))
 
-config_custom = ConfigCustom
+config_custom = CustomConfig
