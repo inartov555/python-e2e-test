@@ -41,7 +41,7 @@ def retrieve_custom_config(pytestconfig):
 
 
 @pytest.fixture(autouse=True, scope="class")
-def setup_elements_for_test(request):
+def setup_elements_for_test(request, page):
     request.cls.custom_config = CustomConfig()
     request.cls.landing_page = LandingPage(request.cls.custom_config.base_url, page, request)
     request.cls.signup_page = SignupPage(request.cls.custom_config.base_url, page, request)
