@@ -1,7 +1,7 @@
-# Instagram E2E Test Framework (Python + Pytest + Playwright)
+# E2E Test Framework (Python + Pytest + Playwright)
 
 Modern, scalable, and maintainable test framework built with **Pytest** and **Playwright** using **Page Object Model**,
-OOP, and SOLID principles. Designed per the task to model Instagram public pages and an authenticated feed page.
+OOP, and SOLID principles. Designed per the task to model public pages and an authenticated feed page.
 > Note: Tests that require authentication are **skipped** unless a valid Playwright `storage_state.json` is provided (to avoid CAPTCHA).
 
 ## Quick Start
@@ -26,7 +26,7 @@ pytest -q
 ## Structure
 
 ```
-instagram_e2e_framework/
+python-e2e-test/
   src/
     core/          # config, browser, logging, base abstractions
     components/    # reusable UI components (PostCard)
