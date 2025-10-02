@@ -4,7 +4,8 @@ from ..base_page import BasePage
 from ...components.post_card import PostCard
 
 class HomeFeedPage(BasePage):
-    url = "/"
+    def __init__(self):
+        self.url = self.url + "/"
 
     @property
     def first_post(self) -> PostCard:
