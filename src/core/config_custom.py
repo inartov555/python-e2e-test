@@ -8,7 +8,7 @@ from tools.singleton import Singleton
 load_dotenv()
 
 # @dataclass(frozen=True)
-class ConfigCustom(metaclass=Singleton):
+class CustomConfig(metaclass=Singleton):
     def __init__(self):
         storage_state = os.getenv("STORAGE_STATE") or None
 

@@ -8,19 +8,11 @@ from src.pages.public.landing_page import LandingPage
 from src.pages.public.login_page import LoginPage
 from src.pages.public.signup_page import SignupPage
 from src.pages.private.home_feed_page import HomeFeedPage
-from src.core.config_custom import ConfigCustom
+from src.core.config_custom import CustomConfig
 from tools.logger.logger import Logger
 
 
 log = Logger(__name__)
-
-
-@pytest.fixture(autouse=True, scope="class")
-def setup_elements_for_test(request):
-    request.cls.landing_page = LandingPage(Page, request)
-    request.cls.signup_page = SignupPage(Page, request)
-    request.cls.login_page = LoginPage(Page, request)
-    request.cls.home_page = HomeFeedPage(Page, request)
 
 
 def pytest_addoption(parser):
@@ -29,8 +21,8 @@ def pytest_addoption(parser):
     parser.addoption("--viewport-height", action="store", default="1080", help="Browser widndow height")
 
 
-@pytest.fixture(scope="session")
-def retrieve_custom_config(request):
+@pytest.fixture(autouse=True, scope="session")
+def retrieve_custom_config(pytestconfig):
     """
     How to add a new parameter:
         1. Get param value using pytestconfig.getoption("--param_name")
@@ -38,15 +30,24 @@ def retrieve_custom_config(request):
 
     It forms ConfigCustom class
     """
-    config_custom = ConfigCustom()
-    base_url = request.config.getoption("--base-url", default="https://www.instagram.com")
-    setattr(config_custom, "base_url", base_url)
-    headless = request.config.getoption("--headless").lower() == "true"
-    setattr(config_custom, "headless", headless)
-    viewport_width = request.config.getoption("--viewport-width")
-    setattr(config_custom, "viewport_width", viewport_width)
-    viewport_height = request.config.getoption("--viewport-height")
-    setattr(config_custom, "viewport_height", viewport_height)
+    custom_config = CustomConfig()
+    base_url = pytestconfig.getoption("--base-url", "https://www.instagram.com")
+    setattr(custom_config, "base_url", base_url)
+    headless = pytestconfig.getoption("--headless").lower() == "true"
+    setattr(custom_config, "headless", headless)
+    viewport_width = pytestconfig.getoption("--viewport-width")
+    setattr(custom_config, "viewport_width", viewport_width)
+    viewport_height = pytestconfig.getoption("--viewport-height")
+    setattr(custom_config, "viewport_height", viewport_height)
+
+
+@pytest.fixture(autouse=True, scope="class")
+def setup_elements_for_test(request):
+    request.cls.custom_config = ConfigCustom()
+    request.cls.landing_page = LandingPage(Page, request)
+    request.cls.signup_page = SignupPage(Page, request)
+    request.cls.login_page = LoginPage(Page, request)
+    request.cls.home_page = HomeFeedPage(Page, request)
 
 
 def timestamped_path(file_name, file_ext, path_to_file=os.getenv("HOST_ARTIFACTS")):
