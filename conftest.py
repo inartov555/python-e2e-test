@@ -31,7 +31,7 @@ def retrieve_custom_config(pytestconfig):
     It forms ConfigCustom class
     """
     custom_config = CustomConfig()
-    base_url = pytestconfig.getoption("--base-url", "https://www.instagram.com")
+    base_url = pytestconfig.getoption("--base-url", default="https://www.instagram.com")
     setattr(custom_config, "base_url", base_url)
     headless = pytestconfig.getoption("--headless").lower() == "true"
     setattr(custom_config, "headless", headless)
@@ -44,10 +44,10 @@ def retrieve_custom_config(pytestconfig):
 @pytest.fixture(autouse=True, scope="class")
 def setup_elements_for_test(request):
     request.cls.custom_config = CustomConfig()
-    request.cls.landing_page = LandingPage(Page, request)
-    request.cls.signup_page = SignupPage(Page, request)
-    request.cls.login_page = LoginPage(Page, request)
-    request.cls.home_page = HomeFeedPage(Page, request)
+    request.cls.landing_page = LandingPage(request.cls.custom_config.base_url, Page, request)
+    request.cls.signup_page = SignupPage(request.cls.custom_config.base_url, Page, request)
+    request.cls.login_page = LoginPage(request.cls.custom_config.base_url, Page, request)
+    request.cls.home_page = HomeFeedPage(request.cls.custom_config.base_url, Page, request)
 
 
 def timestamped_path(file_name, file_ext, path_to_file=os.getenv("HOST_ARTIFACTS")):

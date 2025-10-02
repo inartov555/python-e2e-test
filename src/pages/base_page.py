@@ -5,9 +5,9 @@ from playwright.sync_api import Page, Locator, expect
 
 
 class BasePage:
-    def __init__(self, page: Page, request):
+    def __init__(self, url: str, page: Page, request):
         self.page = page
-        self.url = request.cls.custom_config.base_url
+        self.url = url
 
     def open(self) -> "BasePage":
         self.page.goto(self.url)
