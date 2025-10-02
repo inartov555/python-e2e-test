@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 @dataclass(frozen=True)
-class Config:
+class ConfigCustom:
     base_url: str = os.getenv("BASE_URL", "https://www.instagram.com")
     headless: bool = os.getenv("HEADLESS", "true").lower() == "true"
     storage_state: str | None = os.getenv("STORAGE_STATE") or None
@@ -17,4 +17,4 @@ class Config:
     def has_auth(self) -> bool:
         return bool(self.storage_state and os.path.exists(self.storage_state))
 
-config = Config()
+config_custom = ConfigCustom()
