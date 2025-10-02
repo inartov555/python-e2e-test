@@ -53,16 +53,6 @@ def add_loggers(request):
     log.info("Test's logs will be stored: '{}'".format(log_file))
 
 
-def pytest_addoption(parser):
-    parser.addoption("--url", action="store_true", default="https://www.instagram.com/",
-                     help="Default URL")
-
-
-def get_url():
-    url = pytestconfig.getoption("--url")
-    return url
-
-
 def pytest_collection_modifyitems(session, config, items):
     if not config_custom.has_auth:
         skip_marker = pytest.mark.skip(reason="No STORAGE_STATE provided; skipping auth tests.")

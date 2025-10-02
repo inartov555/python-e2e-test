@@ -3,11 +3,11 @@ from typing import Optional
 
 from playwright.sync_api import Page, Locator, expect
 
-from ..conftest import get_url
+from src.core.config_custom import config_custom
 
 
 class BasePage:
-    url: str = get_url()
+    url: str = config_custom.base_url
 
     def __init__(self, page: Page):
         self.page = page
