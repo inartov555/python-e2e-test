@@ -2,9 +2,16 @@ import pytest
 from playwright.sync_api import Page
 
 from src.core.config_custom import config_custom
+from src.pages.public.landing_page import LandingPage
+from src.pages.public.login_page import LoginPage
+from src.pages.public.signup_page import SignupPage
 
 
-
+@pytest.fixture(autouse=True, scope="class")
+def setup_elements_for_test(request):
+    request.cls.landing_page = LandingPage(Page)
+    request.cls.signup_page = SignupPage(Page)
+    request.cls.login_page = LoginPage(Page)
 
 
 @pytest.fixture(autouse=True, scope="session")
