@@ -16,6 +16,17 @@ def setup_elements_for_test(request):
     request.cls.login_page = LoginPage(Page)
 
 
+def timestamped_path(file_name, file_ext, path_to_file=os.getenv("HOST_ARTIFACTS")):
+    """
+    Args:
+        file_name (str): e.g. screenshot
+        file_ext (str): file extention, e.g., png
+        path_to_file (str): e.g. /home/user/test_dir/artifacts/
+    """
+    ts = datetime.utcnow().strftime("%Y%m%d-%H%M%S.%f")
+    return os.path.join(path_to_file, f"{file_name}-{ts}.{file_ext}")
+
+
 @pytest.fixture(autouse=True, scope="session")
 def add_loggers(request):
     """
