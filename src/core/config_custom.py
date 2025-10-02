@@ -1,5 +1,5 @@
 import os
-# from __future__ import annotations
+from tools.singleton import Singleton
 from dataclasses import dataclass
 from dotenv import load_dotenv
 
@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # @dataclass(frozen=True)
-class ConfigCustom:
+class ConfigCustom(metadata=Singleton):
     storage_state: str | None = os.getenv("STORAGE_STATE") or None
 
     @property

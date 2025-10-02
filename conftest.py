@@ -38,14 +38,15 @@ def retrieve_custom_config(request):
 
     It forms ConfigCustom class
     """
+    config_custom = ConfigCustom()
     base_url = request.config.getoption("--base-url", default="https://www.instagram.com")
-    setattr(ConfigCustom, "base_url", base_url)
+    setattr(config_custom, "base_url", base_url)
     headless = request.config.getoption("--headless").lower() == "true"
-    setattr(ConfigCustom, "headless", headless)
+    setattr(config_custom, "headless", headless)
     viewport_width = request.config.getoption("--viewport-width")
-    setattr(ConfigCustom, "viewport_width", viewport_width)
+    setattr(config_custom, "viewport_width", viewport_width)
     viewport_height = request.config.getoption("--viewport-height")
-    setattr(ConfigCustom, "viewport_height", viewport_height)
+    setattr(config_custom, "viewport_height", viewport_height)
 
 
 def timestamped_path(file_name, file_ext, path_to_file=os.getenv("HOST_ARTIFACTS")):
