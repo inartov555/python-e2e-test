@@ -1,5 +1,6 @@
 from __future__ import annotations
 from playwright.sync_api import Locator, expect
+
 from ..base_page import BasePage
 
 
@@ -7,10 +8,6 @@ class LandingPage(BasePage):
     def __init__(self, url: str, page: Page, request):
         super().__init__(url, page, request)
         self.url = self.url + "/"
-
-    @property
-    def signup_link(self) -> Locator:
-        return self.locator('a[href="/accounts/emailsignup/"]')
 
     @property
     def login_link(self) -> Locator:

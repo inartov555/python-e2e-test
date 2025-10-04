@@ -1,5 +1,6 @@
 from __future__ import annotations
 from playwright.sync_api import Locator, expect
+
 from ..base_page import BasePage
 
 
@@ -9,20 +10,12 @@ class LoginPage(BasePage):
         self.url = self.url + "/accounts/login/"
 
     @property
-    def username_input(self) -> Locator:
-        return self.locator('input[name="username"]')
+    def forgot_password_link(self) -> Locator:
+        return self.locator('a[href="/accounts/password/reset/"]')
 
     @property
-    def password_input(self) -> Locator:
-        return self.locator('input[name="password"]')
-
-    @property
-    def submit_button(self) -> Locator:
-        return self.locator('button[type="submit"]')
-
-    @property
-    def error_text(self) -> Locator:
-        return self.locator('[role="alert"], #slfErrorAlert, div:has-text("incorrect")')
+    def allow_all_cookies_button(self) -> Locator:
+        return self.locator('button[class="_a9-- _ap36 _asz1"]')
 
     def login(self, username: str, password: str) -> None:
         self.username_input.fill(username)
@@ -32,3 +25,7 @@ class LoginPage(BasePage):
     def expect_loaded(self) -> None:
         expect(self.username_input).to_be_visible()
         expect(self.password_input).to_be_visible()
+
+    def allow_all_cookies_if_shown(self) -> None:
+        if self.allow_all_cookies_button.is_visible():
+            self.allow_all_cookies_button.click()
