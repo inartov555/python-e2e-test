@@ -31,30 +31,38 @@ def pytest_addoption(parser):
     parser.addoption("--ini-config", action="store", default="pytest.ini", help="The path to the *.ini config file")
 
 
-@pytest.fixture(autouse=False, scope="session")
-def parse_arguments(pytestconfig):
+def get_browser(custom_config: CustomConfig):
     """
-    How to add a new parameter:
-        1. Get param value using pytestconfig.getoption("--param_name")
-        2. Add param to the passed_params obj using setattr(passed_params, "param_name", param_name)
-
-    It forms CustomConfig class
+    Args:
+        browser_type (str): one of (chromium, chrome, msedge, firefox, safari, webkit)
     """
-    ini_config_file = pytestconfig.getoption("--ini-config")
-    custom_config = get_pytest_ini_config(ini_config_file)
+    if browser_type.strip().lower() in ("chromium", "chrome", "msedge"):
+        # Chromium Google Chrome, MS Edge
+        driver = playwright.chromium.launch(headless=custom_config.is_headless)
+    elif browser_type.strip().lower() in ("firefox"):
+        # Firefox
+        driver = playwright.firefox.launch(headless=custom_config.is_headless)
+    else:
+        # WebKit, Safari
+        driver = playwright.webkit.launch(headless=custom_config.is_headless)
+    context = driver.new_context(
+        base_url=custom_config.base_url
+        viewport={"width": custom_config.viewport_width, "height": custom_config.viewport_height}
+    )
+    page = context.new_page()
+    return driver
 
 
 @pytest.fixture(autouse=True, scope="session")
 def driver(playwright, pytestconfig):
     ini_config_file = pytestconfig.getoption("--ini-config")
     custom_config = get_pytest_ini_config(ini_config_file)
-    custom_config = CustomConfig(None)
-    driver = playwright.chromium.launch(headless=custom_config.is_headless)
+    driver = get_browser(custom_config)
     yield driver
     driver.close()
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture(autouse=True, scope="function")
 def setup_elements_for_test(request, page):
     request.cls.custom_config = CustomConfig()
     request.cls.landing_page = LandingPage(request.cls.custom_config.base_url, page, request)
