@@ -1,5 +1,6 @@
 import os
 from datetime import datetime
+from configparser import ConfigParser, ExtendedInterpolation
 
 import pytest
 
@@ -12,6 +13,11 @@ from tools.logger.logger import Logger
 
 
 log = Logger(__name__)
+
+
+def read_pytest_ini_config(file_path: str) -> dict:
+    cfg = ConfigParser(interpolation=ExtendedInterpolation())
+    cfg.read(file_path)
 
 
 def pytest_addoption(parser):
@@ -30,6 +36,8 @@ def retrieve_custom_config(pytestconfig):
     It forms CustomConfig class
     """
     custom_config = CustomConfig()
+    res = read_pytest_ini_config("/home/oeaohoii/Documents/dutaf/force_stag_188")
+    print(f"\n\n\n\n res = {res} \n {type(res)} \n\n\n\n")
     base_url = pytestconfig.getoption("--base-url", default="https://www.instagram.com")
     setattr(custom_config, "base_url", base_url)
     headless = pytestconfig.getoption("--headless").lower() == "true"
@@ -50,7 +58,6 @@ def browser(playwright, pytestconfig):
 
 @pytest.fixture(autouse=True)
 def setup_elements_for_test(request, page):
-    print(f"\n\n\n {type(request)} \n {type(page)} \n\n\n")
     request.cls.custom_config = CustomConfig()
     request.cls.landing_page = LandingPage(request.cls.custom_config.base_url, page, request)
     request.cls.signup_page = SignupPage(request.cls.custom_config.base_url, page, request)

@@ -1,10 +1,6 @@
 class Singleton(type):
     """
-    MultiClass singleton. It creates unique single instance for every inherited class.
-    Is used in ServiceAPI and OpenAPI
-
-    Note:
-        os.environ.get("API_REPLACE_INSTANCE", "true") is used in the integration tests
+    It creates unique single instance for every inherited class.
     """
     _instance = dict()
 
