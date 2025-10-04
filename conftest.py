@@ -19,6 +19,7 @@ def get_pytest_ini_config(file_path: str) -> CustomConfig:
     result_dict = {}
     cfg = ConfigParser(interpolation=ExtendedInterpolation())
     cfg.read(file_path)
+    result_dict["browser"] = cfg.get("pytest", "browser")
     result_dict["base_url"] = cfg.get("pytest", "base_url")
     result_dict["is_headless"] = cfg.getboolean("pytest", "is_headless")
     result_dict["viewport_width"] = cfg.getint("pytest", "viewport_width")
@@ -36,18 +37,21 @@ def get_browser(custom_config: CustomConfig):
     Args:
         browser_type (str): one of (chromium, chrome, msedge, firefox, safari, webkit)
     """
-    if browser_type.strip().lower() in ("chromium", "chrome", "msedge"):
+    if custom_config.browser in ("chromium", "chrome", "msedge"):
         # Chromium Google Chrome, MS Edge
         driver = playwright.chromium.launch(headless=custom_config.is_headless)
-    elif browser_type.strip().lower() in ("firefox"):
+    elif custom_config.browser in ("firefox"):
         # Firefox
         driver = playwright.firefox.launch(headless=custom_config.is_headless)
-    else:
+    elif custom_config.browser in ("webkit", "safari"):
         # WebKit, Safari
         driver = playwright.webkit.launch(headless=custom_config.is_headless)
+    else:
+        raise ValueError(f"browser config param contains incorrect value: {custom_config.browser}")
     context = driver.new_context(
-        base_url=custom_config.base_url
-        viewport={"width": custom_config.viewport_width, "height": custom_config.viewport_height}
+        base_url=custom_config.base_url,
+        viewport={"width": custom_config.viewport_width,
+                  "height": custom_config.viewport_height}
     )
     page = context.new_page()
     return driver
