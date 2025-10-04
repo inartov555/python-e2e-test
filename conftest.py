@@ -19,7 +19,7 @@ def get_pytest_ini_config(file_path: str) -> CustomConfig:
     result_dict = {}
     cfg = ConfigParser(interpolation=ExtendedInterpolation())
     cfg.read(file_path)
-    result_dict["base_url"] = cfg.getstr("pytest", "base_url")
+    result_dict["base_url"] = cfg.get("pytest", "base_url")
     result_dict["is_headless"] = cfg.getboolean("pytest", "is_headless")
     result_dict["viewport_width"] = cfg.getint("pytest", "viewport_width")
     result_dict["viewport_height"] = cfg.getint("pytest", "viewport_height")
