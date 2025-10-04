@@ -15,10 +15,15 @@ from tools.logger.logger import Logger
 log = Logger(__name__)
 
 
-def read_pytest_ini_config(file_path: str) -> dict:
+def get_pytest_ini_config(file_path: str) -> dict:
+    result_dict = {}
     cfg = ConfigParser(interpolation=ExtendedInterpolation())
-    res = cfg.read(file_path)
-    return res, cfg
+    cfg.read(file_path)
+    result_dict["base_url"] = cfg.getstr("pytest", "base_url")
+    result_dict["is_headless"] = cfg.getboolean("pytest", "is_headless")
+    result_dict["viewport_width"] = cfg.getint("pytest", "viewport_width")
+    result_dict["viewport_height"] = cfg.getint("pytest", "viewport_height")
+    return result_dict
 
 
 def pytest_addoption(parser):
@@ -37,8 +42,7 @@ def retrieve_custom_config(pytestconfig):
     It forms CustomConfig class
     """
     custom_config = CustomConfig()
-    res = read_pytest_ini_config("/home/oeaohoii/Documents/dutaf/force_stag_188")
-    print(f"\n\n\n\n res = {res} \n {type(res)} \n {type(res[0])} \n {type(res[1])} \n\n\n\n")
+    res = read_pytest_ini_config("pytest.ini")
     base_url = pytestconfig.getoption("--base-url", default="https://www.instagram.com")
     # setattr(custom_config, "base_url", base_url)
     headless = pytestconfig.getoption("--headless").lower() == "true"

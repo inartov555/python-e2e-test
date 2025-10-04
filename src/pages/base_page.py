@@ -13,7 +13,8 @@ class BasePage:
             request (_pytest.fixtures.SubRequest): request fixture
         """
         self.page = page
-        self.url = url
+        # self.url = url
+        self.url = "https://www.instagram.com"
 
     def open(self) -> "BasePage":
         self.page.goto(self.url)
