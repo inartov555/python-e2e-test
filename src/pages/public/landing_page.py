@@ -22,10 +22,6 @@ class LandingPage(BasePage):
         return self.locator('a[href="/accounts/emailsignup/"]')
 
     @property
-    def login_link(self) -> Locator:
-        return self.locator('a[href="/accounts/login/"]')
-
-    @property
     def username_input(self) -> Locator:
         return self.locator('input[name="username"]')
 
@@ -47,9 +43,6 @@ class LandingPage(BasePage):
 
     def go_to_signup(self) -> None:
         self.signup_link.click()
-
-    def go_to_login(self) -> None:
-        self.login_link.click()
 
     def expect_loaded(self) -> None:
         expect(self.signup_link.or_(self.login_link)).to_be_visible()

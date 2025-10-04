@@ -13,7 +13,7 @@ class TestPublicPages:
     def test_navigate_to_login(self):
         self.landing_page.open()
         self.login_page.allow_all_cookies_if_shown()
-        self.landing_page.go_to_login()
+        self.signup_page.go_to_login()
         self.login_page.expect_loaded()
 
     def test_navigate_to_signup(self):

@@ -37,6 +37,13 @@ class SignupPage(BasePage):
     def submit_button(self) -> Locator:
         return self.locator('button[type="submit"]')
 
+    @property
+    def login_link(self) -> Locator:
+        return self.locator('a[href="/accounts/login/?source=auth_switcher"]')
+
+    def go_to_login(self) -> None:
+        self.login_link.click()
+
     def expect_loaded(self) -> None:
         expect(self.email_or_phone).to_be_visible()
         expect(self.full_name).to_be_visible()
