@@ -8,7 +8,7 @@ from src.pages.public.landing_page import LandingPage
 from src.pages.public.login_page import LoginPage
 from src.pages.public.signup_page import SignupPage
 from src.pages.private.home_feed_page import HomeFeedPage
-from src.core.config_custom import CustomConfig
+from src.core.custom_config import CustomConfig
 from tools.logger.logger import Logger
 
 
@@ -31,7 +31,7 @@ def pytest_addoption(parser):
     parser.addoption("--ini-config", action="store", default="pytest.ini", help="The path to the *.ini config file")
 
 
-@pytest.fixture(autouse=True, scope="session")
+@pytest.fixture(autouse=False, scope="session")
 def parse_arguments(pytestconfig):
     """
     How to add a new parameter:
@@ -46,6 +46,8 @@ def parse_arguments(pytestconfig):
 
 @pytest.fixture(autouse=True, scope="session")
 def driver(playwright, pytestconfig):
+    ini_config_file = pytestconfig.getoption("--ini-config")
+    custom_config = get_pytest_ini_config(ini_config_file)
     custom_config = CustomConfig(None)
     driver = playwright.chromium.launch(headless=custom_config.is_headless)
     yield b
