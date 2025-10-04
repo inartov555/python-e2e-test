@@ -50,7 +50,7 @@ def driver(playwright, pytestconfig):
     custom_config = get_pytest_ini_config(ini_config_file)
     custom_config = CustomConfig(None)
     driver = playwright.chromium.launch(headless=custom_config.is_headless)
-    yield b
+    yield driver
     driver.close()
 
 
