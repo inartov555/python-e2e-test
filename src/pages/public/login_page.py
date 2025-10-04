@@ -6,6 +6,12 @@ from ..base_page import BasePage
 
 class LoginPage(BasePage):
     def __init__(self, url: str, page: Page, request):
+        """
+        Args:
+            url (str): web site URL
+            page (playwright.sync_api._generated.Page): page fixture
+            request (_pytest.fixtures.SubRequest): request fixture
+        """
         super().__init__(url, page, request)
         self.url = self.url + "/accounts/login/"
 

@@ -50,6 +50,7 @@ def browser(playwright, pytestconfig):
 
 @pytest.fixture(autouse=True)
 def setup_elements_for_test(request, page):
+    print(f"\n\n\n {type(request)} \n {type(page)} \n\n\n")
     request.cls.custom_config = CustomConfig()
     request.cls.landing_page = LandingPage(request.cls.custom_config.base_url, page, request)
     request.cls.signup_page = SignupPage(request.cls.custom_config.base_url, page, request)

@@ -6,6 +6,12 @@ from playwright.sync_api import Page, Locator, expect
 
 class BasePage:
     def __init__(self, url: str, page: Page, request):
+        """
+        Args:
+            url (str): web site URL
+            page (playwright.sync_api._generated.Page): page fixture
+            request (_pytest.fixtures.SubRequest): request fixture
+        """
         self.page = page
         self.url = url
 
