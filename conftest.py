@@ -1,6 +1,7 @@
 import os
 from datetime import datetime
 from configparser import ConfigParser, ExtendedInterpolation
+from dataclasses import dataclass
 
 import pytest
 from playwright.sync_api import Playwright, sync_playwright, Browser, BrowserContext, Page
@@ -32,7 +33,7 @@ def pytest_addoption(parser):
     parser.addoption("--ini-config", action="store", default="pytest.ini", help="The path to the *.ini config file")
 
 
-def get_browser(playwright, page):
+def get_browser(playwright, request):
     width = custom_config_global.width
     height = custom_config_global.height
     if custom_config_global.browser in ("chromium", "chrome", "msedge"):
@@ -45,31 +46,33 @@ def get_browser(playwright, page):
                                             args=[f"--window-size={width},{height}"])
     elif custom_config_global.browser in ("webkit", "safari"):
         # WebKit, Safari
-        browser = playwright.webkit.launch(headless=custom_config_global.is_headless,
-                                           args=[f"--window-size={width},{height}"])
+        browser = playwright.webkit.launch(headless=custom_config_global.is_headless)
     else:
         raise ValueError(f"browser config param contains incorrect value: {custom_config_global.browser}")
     context = browser.new_context(viewport={"width": width, "height": height})
     page = context.new_page()
+    page.set_default_navigation_timeout(20000)
+    page.set_default_timeout(20000)
+    request.cls.page = page
     return browser
 
 
-@pytest.fixture(autouse=True, scope="function")
-def browser_setup(playwright, pytestconfig, page):
+@pytest.fixture(autouse=True, scope="class")
+def browser_setup(playwright, pytestconfig, request):
     ini_config_file = pytestconfig.getoption("--ini-config")
     fill_in_custom_config_from_ini_config(ini_config_file)
-    browser = get_browser(playwright, page)
+    browser = get_browser(playwright, request)
     yield browser
     browser.close()
 
 
 @pytest.fixture(autouse=True, scope="function")
-def setup_elements_for_test(request, page):
+def setup_elements_for_test(request):
     request.cls.custom_config = custom_config_global
-    request.cls.landing_page = LandingPage(request.cls.custom_config.base_url, page, request)
-    request.cls.signup_page = SignupPage(request.cls.custom_config.base_url, page, request)
-    request.cls.login_page = LoginPage(request.cls.custom_config.base_url, page, request)
-    request.cls.home_page = HomeFeedPage(request.cls.custom_config.base_url, page, request)
+    request.cls.landing_page = LandingPage(request.cls.custom_config.base_url, request.cls.page, request)
+    request.cls.signup_page = SignupPage(request.cls.custom_config.base_url, request.cls.page, request)
+    request.cls.login_page = LoginPage(request.cls.custom_config.base_url, request.cls.page, request)
+    request.cls.home_page = HomeFeedPage(request.cls.custom_config.base_url, request.cls.page, request)
 
 
 def timestamped_path(file_name, file_ext, path_to_file=os.getenv("HOST_ARTIFACTS")):

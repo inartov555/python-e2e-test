@@ -18,7 +18,9 @@ class TestPublicPages:
 
     def test_navigate_to_signup(self):
         self.landing_page.open()
+        print("\n\n\n\n Yaqui \n\n\n\n")
         self.login_page.allow_all_cookies_if_shown()
+        print("\n\n\n\n Yaqui \n\n\n\n")
         self.landing_page.go_to_signup()
         self.signup_page.expect_loaded()
 
