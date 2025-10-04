@@ -19,7 +19,7 @@ class BasePage:
         self.url = url
 
     def take_a_screenshot(self) -> None:
-        page.screenshot(path=timestamped_path("screenshot"))
+        self.page.screenshot(path=timestamped_path("screenshot"))
 
     def open(self) -> "BasePage":
         self.page.goto(self.url, wait_until="load", timeout=20000)

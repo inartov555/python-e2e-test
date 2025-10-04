@@ -1,8 +1,10 @@
 import pytest
 
 from tools.logger.logger import Logger
+from src.page.conftest import setup_elements_for_test
 
 
+@pytest.mark.usefixtures("setup_elements_for_test")
 class TestFeedAuth:
 
     @pytest.mark.auth
