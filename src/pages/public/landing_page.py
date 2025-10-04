@@ -10,6 +10,10 @@ class LandingPage(BasePage):
         self.url = self.url + "/"
 
     @property
+    def signup_link(self) -> Locator:
+        return self.locator('a[href="/accounts/emailsignup/"]')
+
+    @property
     def login_link(self) -> Locator:
         return self.locator('a[href="/accounts/login/"]')
 
