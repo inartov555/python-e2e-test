@@ -9,11 +9,11 @@ load_dotenv()
 
 # @dataclass(frozen=True)
 class CustomConfig(metaclass=Singleton):
-    def __init__(self):
-        self._base_url = None
-        self._is_headless = None
-        self._viewport_width = None
-        self._viewport_height = None
+    def __init__(self, param_dict: dict):
+        self._base_url = param_dict.get("base_url")
+        self._is_headless = param_dict.get("is_headless")
+        self._viewport_width = param_dict.get("viewport_width")
+        self._viewport_height = param_dict.get("viewport_height")
         # storage_state = os.getenv("STORAGE_STATE") or None
 
     @property

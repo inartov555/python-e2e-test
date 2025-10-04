@@ -15,7 +15,7 @@ from tools.logger.logger import Logger
 log = Logger(__name__)
 
 
-def get_pytest_ini_config(file_path: str) -> dict:
+def get_pytest_ini_config(file_path: str) -> CustomConfig:
     result_dict = {}
     cfg = ConfigParser(interpolation=ExtendedInterpolation())
     cfg.read(file_path)
@@ -23,7 +23,8 @@ def get_pytest_ini_config(file_path: str) -> dict:
     result_dict["is_headless"] = cfg.getboolean("pytest", "is_headless")
     result_dict["viewport_width"] = cfg.getint("pytest", "viewport_width")
     result_dict["viewport_height"] = cfg.getint("pytest", "viewport_height")
-    return result_dict
+    custom_config = CustomConfig(result_dict)
+    return custom_config
 
 
 def pytest_addoption(parser):
@@ -53,12 +54,12 @@ def retrieve_custom_config(pytestconfig):
     # setattr(custom_config, "viewport_height", viewport_height)
 
 
-@pytest.fixture(scope="session")
-def browser(playwright, pytestconfig):
+@pytest.fixture(autouse=True, scope="session")
+def driver(playwright, pytestconfig):
     custom_config = CustomConfig()
-    b = playwright.chromium.launch(headless=custom_config.is_headless)
+    driver = playwright.chromium.launch(headless=custom_config.is_headless)
     yield b
-    b.close()
+    driver.close()
 
 
 @pytest.fixture(autouse=True)
