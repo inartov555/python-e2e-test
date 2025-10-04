@@ -4,6 +4,7 @@ from tools.logger.logger import Logger
 
 
 class TestFeedAuth:
+    log = Logger(__name__)
 
     @pytest.mark.auth
     def test_feed_shows_posts(self):

@@ -15,11 +15,14 @@ class BasePage:
             page (playwright.sync_api._generated.Page): page fixture
             request (_pytest.fixtures.SubRequest): request fixture
         """
+        self.log = Logger(__name__)
         self.page = page
         self.url = url
+        self.request_fixture = request
 
     def take_a_screenshot(self) -> None:
-        self.page.screenshot(path=timestamped_path("screenshot", "png"))
+        test_name = self.request_fixture.node.name
+        self.page.screenshot(path=timestamped_path(test_name, "png"))
 
     def open(self) -> "BasePage":
         self.page.goto(self.url, wait_until="load", timeout=20000)

@@ -13,7 +13,29 @@ from tools.logger.logger import Logger
 log = Logger(__name__)
 
 
+@pytest.fixture(autouse=True, scope="session")
+def add_loggers(request):
+    """
+    The fixture to configure loggers
+    It uses built-in pytest arguments to configure loggigng level and files
+
+    Parameters:
+        log_level or --log-level general log level for capturing
+        log_file_level or --log-file-level  level of log to be stored to a file. Usually lower than general log
+        log_file or --log-file  path where logs will be saved
+    """
+    artifacts_folder_default = os.getenv("HOST_ARTIFACTS")
+    log_level = "DEBUG"
+    log_file_level = "DEBUG"
+    log_file = os.path.join(timestamped_path("pytest", "log", artifacts_folder_default))
+    log.setup_cli_handler(level=log_level)
+    log.setup_filehandler(level=log_file_level, file_name=log_file)
+    log.info("General loglevel: '{}', File: '{}'".format(log_level, log_file_level))
+    log.info("Test logs will be stored: '{}'".format(log_file))
+
+
 def fill_in_custom_config_from_ini_config(file_path: str):
+    log.info("Reading config properties from '{}' and storing to a data class: '{}'".format(file_path))
     result_dict = {}
     cfg = ConfigParser(interpolation=ExtendedInterpolation())
     cfg.read(file_path)
@@ -30,6 +52,7 @@ def pytest_addoption(parser):
 
 
 def get_browser(playwright, request):
+    log.info("Getting a browser basing on the config properties")
     width = custom_config_global.width
     height = custom_config_global.height
     if custom_config_global.browser in ("chromium", "chrome", "msedge"):
@@ -50,6 +73,7 @@ def get_browser(playwright, request):
     # page.set_default_navigation_timeout(15000)
     # page.set_default_timeout(15000)
     request.cls.page = page
+    log.info(f"{custom_config_global.browser} browser is selected")
     return browser
 
 
@@ -73,7 +97,9 @@ def timestamped_path(file_name, file_ext, path_to_file=os.getenv("HOST_ARTIFACTS
         path_to_file (str): e.g. /home/user/test_dir/artifacts/
     """
     ts = datetime.utcnow().strftime("%Y%m%d-%H%M%S.%f")
-    return os.path.join(path_to_file, f"{file_name}-{ts}.{file_ext}")
+    screenshot_path = os.path.join(path_to_file, f"{file_name}-{ts}.{file_ext}")
+    log.info(f"Screenshot path: {screenshot_path}")
+    return screenshot_path
 
 
 @pytest.fixture(autouse=True, scope="class")
@@ -83,24 +109,3 @@ def browser_setup(playwright, pytestconfig, request):
     browser = get_browser(playwright, request)
     yield browser
     browser.close()
-
-
-@pytest.fixture(autouse=True, scope="session")
-def add_loggers(request):
-    """
-    The fixture to configure loggers
-    It uses built-in pytest arguments to configure loggigng level and files
-
-    Parameters:
-        log_level or --log-level general log level for capturing
-        log_file_level or --log-file-level  level of log to be stored to a file. Usually lower than general log
-        log_file or --log-file  path where logs will be saved
-    """
-    artifacts_folder_default = os.getenv("HOST_ARTIFACTS")
-    log_level = "DEBUG"
-    log_file_level = "DEBUG"
-    log_file = os.path.join(timestamped_path("pytest", "log", artifacts_folder_default))
-    log.setup_cli_handler(level=log_level)
-    log.setup_filehandler(level=log_file_level, file_name=log_file)
-    log.info("General loglevel: '{}', File: '{}'".format(log_level, log_file_level))
-    log.info("Test's logs will be stored: '{}'".format(log_file))

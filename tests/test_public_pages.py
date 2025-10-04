@@ -4,6 +4,7 @@ from tools.logger.logger import Logger
 
 
 class TestPublicPages:
+    log = Logger(__name__)
 
     def test_landing_links_present(self):
         self.landing_page.open()

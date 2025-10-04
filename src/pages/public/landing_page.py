@@ -15,6 +15,7 @@ class LandingPage(BasePage):
             request (_pytest.fixtures.SubRequest): request fixture
         """
         super().__init__(url, page, request)
+        self.log = Logger(__name__)
         self.url = self.url + "/"
 
     @property

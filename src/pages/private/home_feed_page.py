@@ -10,6 +10,7 @@ from tools.logger.logger import Logger
 class HomeFeedPage(BasePage):
     def __init__(self, url: str, page: Page, request):
         super().__init__(url, page, request)
+        self.log = Logger(__name__)
         self.url = self.url + "/"
 
     @property
