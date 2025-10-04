@@ -41,8 +41,14 @@ class LandingPage(BasePage):
     def forgot_password_link(self) -> Locator:
         return self.locator('a[href="/accounts/password/reset/"]')
 
+    @property
+    def landing_image(self) -> Locator:
+        return self.locator('img[href="/images/assets_DO_NOT_HARDCODE/lox_brand/landing-2x.png"]')
+
     def go_to_signup(self) -> None:
+        self.take_a_screenshot()
         self.signup_link.click()
 
     def expect_loaded(self) -> None:
-        expect(self.signup_link.or_(self.login_link)).to_be_visible()
+        self.take_a_screenshot()
+        expect(self.signup_link.or_(self.landing_image)).to_be_visible()

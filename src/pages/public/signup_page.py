@@ -42,9 +42,11 @@ class SignupPage(BasePage):
         return self.locator('a[href="/accounts/login/?source=auth_switcher"]')
 
     def go_to_login(self) -> None:
+        self.take_a_screenshot()
         self.login_link.click()
 
     def expect_loaded(self) -> None:
+        self.take_a_screenshot()
         expect(self.email_or_phone).to_be_visible()
         expect(self.full_name).to_be_visible()
         expect(self.username).to_be_visible()

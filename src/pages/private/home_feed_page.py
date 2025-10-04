@@ -24,4 +24,5 @@ class HomeFeedPage(BasePage):
         return [PostCard(roots.nth(i)) for i in range(count)]
 
     def expect_feed_visible(self) -> None:
+        self.take_a_screenshot()
         expect(self.page.locator('article').first).to_be_visible()

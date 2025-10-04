@@ -57,6 +57,29 @@ def get_browser(playwright, request):
     return browser
 
 
+@pytest.fixture(scope="session")
+def screenshot_dir(pytestconfig):
+    # path_from_input_params = pytestconfig.getoption("--screenshot-dir")
+    artifacts_folder_default = os.getenv("HOST_ARTIFACTS")
+    # if path_from_input_params:
+    #    path = path_from_input_params
+    # else:
+    #    path = artifacts_folder_default
+    os.makedirs(artifacts_folder_default, exist_ok=True)
+    return artifacts_folder_default
+
+
+def timestamped_path(file_name, file_ext, path_to_file=os.getenv("HOST_ARTIFACTS")):
+    """
+    Args:
+        file_name (str): e.g. screenshot
+        file_ext (str): file extention, e.g., png
+        path_to_file (str): e.g. /home/user/test_dir/artifacts/
+    """
+    ts = datetime.utcnow().strftime("%Y%m%d-%H%M%S.%f")
+    return os.path.join(path_to_file, f"{file_name}-{ts}.{file_ext}")
+
+
 @pytest.fixture(autouse=True, scope="class")
 def browser_setup(playwright, pytestconfig, request):
     ini_config_file = pytestconfig.getoption("--ini-config")
@@ -73,17 +96,6 @@ def setup_elements_for_test(request):
     request.cls.signup_page = SignupPage(request.cls.custom_config.base_url, request.cls.page, request)
     request.cls.login_page = LoginPage(request.cls.custom_config.base_url, request.cls.page, request)
     request.cls.home_page = HomeFeedPage(request.cls.custom_config.base_url, request.cls.page, request)
-
-
-def timestamped_path(file_name, file_ext, path_to_file=os.getenv("HOST_ARTIFACTS")):
-    """
-    Args:
-        file_name (str): e.g. screenshot
-        file_ext (str): file extention, e.g., png
-        path_to_file (str): e.g. /home/user/test_dir/artifacts/
-    """
-    ts = datetime.utcnow().strftime("%Y%m%d-%H%M%S.%f")
-    return os.path.join(path_to_file, f"{file_name}-{ts}.{file_ext}")
 
 
 @pytest.fixture(autouse=True, scope="session")
