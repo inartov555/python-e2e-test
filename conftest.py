@@ -32,7 +32,7 @@ def pytest_addoption(parser):
 
 
 @pytest.fixture(autouse=True, scope="session")
-def retrieve_custom_config(pytestconfig):
+def parse_arguments(pytestconfig):
     """
     How to add a new parameter:
         1. Get param value using pytestconfig.getoption("--param_name")
@@ -40,21 +40,13 @@ def retrieve_custom_config(pytestconfig):
 
     It forms CustomConfig class
     """
-    custom_config = CustomConfig()
-    res = read_pytest_ini_config("pytest.ini")
-    base_url = pytestconfig.getoption("--base-url", default="https://www.instagram.com")
-    # setattr(custom_config, "base_url", base_url)
-    headless = pytestconfig.getoption("--headless").lower() == "true"
-    # setattr(custom_config, "headless", headless)
-    viewport_width = pytestconfig.getoption("--viewport-width")
-    # setattr(custom_config, "viewport_width", viewport_width)
-    viewport_height = pytestconfig.getoption("--viewport-height")
-    # setattr(custom_config, "viewport_height", viewport_height)
+    ini_config_file = pytestconfig.getoption("--ini-config")
+    custom_config = get_pytest_ini_config(ini_config_file)
 
 
 @pytest.fixture(autouse=True, scope="session")
 def driver(playwright, pytestconfig):
-    custom_config = CustomConfig()
+    custom_config = CustomConfig(None)
     driver = playwright.chromium.launch(headless=custom_config.is_headless)
     yield b
     driver.close()

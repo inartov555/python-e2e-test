@@ -10,6 +10,10 @@ load_dotenv()
 # @dataclass(frozen=True)
 class CustomConfig(metaclass=Singleton):
     def __init__(self, param_dict: dict):
+        """
+        Args:
+            param_dict (dict): it should be passed only once when setting parameters from the *.ini file
+        """
         self._base_url = param_dict.get("base_url")
         self._is_headless = param_dict.get("is_headless")
         self._viewport_width = param_dict.get("viewport_width")
