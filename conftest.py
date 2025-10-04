@@ -28,9 +28,7 @@ def get_pytest_ini_config(file_path: str) -> CustomConfig:
 
 
 def pytest_addoption(parser):
-    parser.addoption("--headless", action="store", default="false", help="Run headless browser (true/false)")
-    parser.addoption("--viewport-width", action="store", default="1920", help="Browser window width")
-    parser.addoption("--viewport-height", action="store", default="1080", help="Browser widndow height")
+    parser.addoption("--ini-config", action="store", default="pytest.ini", help="The path to the *.ini config file")
 
 
 @pytest.fixture(autouse=True, scope="session")

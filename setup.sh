@@ -44,7 +44,7 @@ rm -rf "$COPIED_PROJECT_PATH"
 rsync -aq --progress "$REPO" "$HOST_WORKSPACE" --exclude .git --exclude *.pyc --exclude .pytest_cache
 if [ $? -ne 0 ]; then
   echo "Cant create workspace $COPIED_PROJECT_PATH, Please configure the path inside of this script"
-  ls $HOST_WORKSPACE
+  return 1
 fi
 echo "$REPO is copied to $COPIED_PROJECT_PATH"
 echo "Entering the $COPIED_PROJECT_PATH directory"

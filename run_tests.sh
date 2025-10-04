@@ -2,6 +2,7 @@
 
 # Input parameters:
 #   - $1: the path to the project including the project folder name, defaults to $DEFAULT_REPO_PATH
+#   - $2: the path to the *.ini config file, defaults to pytest.ini
 # Exported variables in the setup.sh file: HOST_ARTIFACTS, ROOT_VENV, TEST_VENV, COPIED_PROJECT_PATH
 
 ORIGINAL_PROJECT_PATH="$(pwd)"
@@ -11,7 +12,7 @@ if [[ $? -ne 0 ]]; then
 fi
 
 # python3 -m pytest --reruns 3 --reruns-delay 2 -v --tb=short -s --html=$HOST_ARTIFACTS/test_report_$(date +%Y-%m-%d_%H-%M-%S).html
-python3 -m pytest -v --tb=short -s -k test_landing_links_present --base-url "https://www.instagram.com" --html=$HOST_ARTIFACTS/test_report_$(date +%Y-%m-%d_%H-%M-%S).html
+python3 -m pytest -v --tb=short -s -k test_landing_links_present --ini-config  --html=$HOST_ARTIFACTS/test_report_$(date +%Y-%m-%d_%H-%M-%S).html
 # Now, let's deactivate venv
 deactivate
 # Returning to the original project path to be able to run the test again with new changes, if there are any
