@@ -3,72 +3,69 @@ from datetime import datetime
 from configparser import ConfigParser, ExtendedInterpolation
 
 import pytest
+from playwright.sync_api import Playwright, sync_playwright, Browser, BrowserContext, Page
 
 from src.pages.public.landing_page import LandingPage
 from src.pages.public.login_page import LoginPage
 from src.pages.public.signup_page import SignupPage
 from src.pages.private.home_feed_page import HomeFeedPage
-from src.core.custom_config import CustomConfig
+from src.core.custom_config import custom_config_global
 from tools.logger.logger import Logger
 
 
 log = Logger(__name__)
 
 
-def get_pytest_ini_config(file_path: str) -> CustomConfig:
+def fill_in_custom_config_from_ini_config(file_path: str):
     result_dict = {}
     cfg = ConfigParser(interpolation=ExtendedInterpolation())
     cfg.read(file_path)
     result_dict["browser"] = cfg.get("pytest", "browser")
     result_dict["base_url"] = cfg.get("pytest", "base_url")
     result_dict["is_headless"] = cfg.getboolean("pytest", "is_headless")
-    result_dict["viewport_width"] = cfg.getint("pytest", "viewport_width")
-    result_dict["viewport_height"] = cfg.getint("pytest", "viewport_height")
-    custom_config = CustomConfig(result_dict)
-    return custom_config
+    result_dict["width"] = cfg.getint("pytest", "width")
+    result_dict["height"] = cfg.getint("pytest", "height")
+    custom_config_global.change_variables(**result_dict)
 
 
 def pytest_addoption(parser):
     parser.addoption("--ini-config", action="store", default="pytest.ini", help="The path to the *.ini config file")
 
 
-def get_browser(custom_config: CustomConfig):
-    """
-    Args:
-        browser_type (str): one of (chromium, chrome, msedge, firefox, safari, webkit)
-    """
-    if custom_config.browser in ("chromium", "chrome", "msedge"):
+def get_browser(playwright, page):
+    width = custom_config_global.width
+    height = custom_config_global.height
+    if custom_config_global.browser in ("chromium", "chrome", "msedge"):
         # Chromium Google Chrome, MS Edge
-        driver = playwright.chromium.launch(headless=custom_config.is_headless)
-    elif custom_config.browser in ("firefox"):
+        browser = playwright.chromium.launch(headless=custom_config_global.is_headless,
+                                             args=[f"--window-size={width},{height}"])
+    elif custom_config_global.browser in ("firefox"):
         # Firefox
-        driver = playwright.firefox.launch(headless=custom_config.is_headless)
-    elif custom_config.browser in ("webkit", "safari"):
+        browser = playwright.firefox.launch(headless=custom_config_global.is_headless,
+                                            args=[f"--window-size={width},{height}"])
+    elif custom_config_global.browser in ("webkit", "safari"):
         # WebKit, Safari
-        driver = playwright.webkit.launch(headless=custom_config.is_headless)
+        browser = playwright.webkit.launch(headless=custom_config_global.is_headless,
+                                           args=[f"--window-size={width},{height}"])
     else:
-        raise ValueError(f"browser config param contains incorrect value: {custom_config.browser}")
-    context = driver.new_context(
-        base_url=custom_config.base_url,
-        viewport={"width": custom_config.viewport_width,
-                  "height": custom_config.viewport_height}
-    )
+        raise ValueError(f"browser config param contains incorrect value: {custom_config_global.browser}")
+    context = browser.new_context(viewport={"width": width, "height": height})
     page = context.new_page()
-    return driver
+    return browser
 
 
-@pytest.fixture(autouse=True, scope="session")
-def driver(playwright, pytestconfig):
+@pytest.fixture(autouse=True, scope="function")
+def browser_setup(playwright, pytestconfig, page):
     ini_config_file = pytestconfig.getoption("--ini-config")
-    custom_config = get_pytest_ini_config(ini_config_file)
-    driver = get_browser(custom_config)
-    yield driver
-    driver.close()
+    fill_in_custom_config_from_ini_config(ini_config_file)
+    browser = get_browser(playwright, page)
+    yield browser
+    browser.close()
 
 
 @pytest.fixture(autouse=True, scope="function")
 def setup_elements_for_test(request, page):
-    request.cls.custom_config = CustomConfig()
+    request.cls.custom_config = custom_config_global
     request.cls.landing_page = LandingPage(request.cls.custom_config.base_url, page, request)
     request.cls.signup_page = SignupPage(request.cls.custom_config.base_url, page, request)
     request.cls.login_page = LoginPage(request.cls.custom_config.base_url, page, request)

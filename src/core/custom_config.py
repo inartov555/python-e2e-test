@@ -1,15 +1,38 @@
-import os
 from dataclasses import dataclass
-from dotenv import load_dotenv
 
-from tools.singleton import Singleton
+# from tools.singleton import Singleton
 
 
-load_dotenv()
+@dataclass(frozen=True)
+class CustomConfig:
+    browser: str = None
+    base_url: str = None
+    is_headless: bool = None
+    width: int = None
+    height: int = None
 
-# @dataclass(frozen=True)
+    def __init__(self):
+        raise NotImplemented("This class is static and so creating a new instance is not allowed")
+
+    @staticmethod
+    def change_variables(**kwargs):
+        """
+        Call it only when reading *.ini config file
+        """
+        for key in kwargs:
+            setattr(CustomConfig, key, kwargs[key])
+
+'''
+@dataclass
 class CustomConfig(metaclass=Singleton):
-    def __init__(self, param_dict: dict):
+    def __init__(self):
+        self._browser: str = None
+        self._base_url: str = None
+        self._is_headless: bool = None
+        self._width: int = None
+        self._height: int = None
+
+    def set_parameters(self, param_dict: dict):
         """
         Args:
             param_dict (dict): it should be passed only once when setting parameters from the *.ini file
@@ -17,12 +40,16 @@ class CustomConfig(metaclass=Singleton):
         self._browser = param_dict.get("browser")
         self._base_url = param_dict.get("base_url")
         self._is_headless = param_dict.get("is_headless")
-        self._viewport_width = param_dict.get("viewport_width")
-        self._viewport_height = param_dict.get("viewport_height")
+        self._width = param_dict.get("width")
+        self._height = param_dict.get("height")
         # storage_state = os.getenv("STORAGE_STATE") or None
 
     @property
     def browser(self) -> str:
+        """
+        Returns:
+            str, one of ("chromium", "chrome", "msedge", firefox, "webkit", "safari")
+        """
         return self._browser
 
     @property
@@ -34,11 +61,12 @@ class CustomConfig(metaclass=Singleton):
         return self._is_headless
 
     @property
-    def viewport_width(self) -> int:
-        return self._viewport_width
+    def width(self) -> int:
+        return self._width
 
     @property
-    def viewport_height(self) -> int:
-        return self._viewport_height
+    def height(self) -> int:
+        return self._height
+'''
 
-config_custom = CustomConfig
+custom_config_global = CustomConfig

@@ -1,7 +1,11 @@
 from __future__ import annotations
+
 from playwright.sync_api import expect
+
 from ..base_page import BasePage
 from ...components.post_card import PostCard
+from tools.logger.logger import Logger
+
 
 class HomeFeedPage(BasePage):
     def __init__(self, url: str, page: Page, request):

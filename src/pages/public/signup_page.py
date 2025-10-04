@@ -1,7 +1,9 @@
 from __future__ import annotations
+
 from playwright.sync_api import Locator, expect
 
 from ..base_page import BasePage
+from tools.logger.logger import Logger
 
 
 class SignupPage(BasePage):

@@ -3,6 +3,8 @@ from typing import Optional
 
 from playwright.sync_api import Page, Locator, expect
 
+from tools.logger.logger import Logger
+
 
 class BasePage:
     def __init__(self, url: str, page: Page, request):
@@ -13,8 +15,7 @@ class BasePage:
             request (_pytest.fixtures.SubRequest): request fixture
         """
         self.page = page
-        # self.url = url
-        self.url = "https://www.instagram.com"
+        self.url = url
 
     def open(self) -> "BasePage":
         self.page.goto(self.url)

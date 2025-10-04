@@ -6,18 +6,18 @@ from .logger import get_logger
 
 logger = get_logger(__name__)
 
-@pytest.fixture(scope="session")
+# @pytest.fixture(scope="session")
 def playwright_instance() -> Playwright:
     with sync_playwright() as p:
         yield p
 
-@pytest.fixture(scope="session")
+# @pytest.fixture(scope="session")
 def browser(playwright_instance: Playwright) -> Browser:
     browser = playwright_instance.chromium.launch(headless=config.headless)
     yield browser
     browser.close()
 
-@pytest.fixture(scope="function")
+# @pytest.fixture(scope="function")
 def browser_context(browser: Browser) -> BrowserContext:
     context_args = dict(
         viewport={"width": config.viewport_width, "height": config.viewport_height},
@@ -31,7 +31,7 @@ def browser_context(browser: Browser) -> BrowserContext:
     yield ctx
     ctx.close()
 
-@pytest.fixture(scope="function")
+# @pytest.fixture(scope="function")
 def page(browser_context: BrowserContext) -> Page:
     page = browser_context.new_page()
     yield page
