@@ -35,7 +35,7 @@ def add_loggers(request):
 
 
 def fill_in_custom_config_from_ini_config(file_path: str):
-    log.info("Reading config properties from '{}' and storing to a data class: '{}'".format(file_path))
+    log.info(f"Reading config properties from '{file_path}' and storing to a data class")
     result_dict = {}
     cfg = ConfigParser(interpolation=ExtendedInterpolation())
     cfg.read(file_path)
