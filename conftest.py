@@ -38,7 +38,7 @@ def retrieve_custom_config(pytestconfig):
     """
     custom_config = CustomConfig()
     res = read_pytest_ini_config("/home/oeaohoii/Documents/dutaf/force_stag_188")
-    print(f"\n\n\n\n res = {res} \n {type(res)} \n {type(res(0)} \n {type(res(1))} \n\n\n\n")
+    print(f"\n\n\n\n res = {res} \n {type(res)} \n {type(res[0])} \n {type(res[1])} \n\n\n\n")
     base_url = pytestconfig.getoption("--base-url", default="https://www.instagram.com")
     # setattr(custom_config, "base_url", base_url)
     headless = pytestconfig.getoption("--headless").lower() == "true"
@@ -52,7 +52,7 @@ def retrieve_custom_config(pytestconfig):
 @pytest.fixture(scope="session")
 def browser(playwright, pytestconfig):
     custom_config = CustomConfig()
-    b = playwright.chromium.launch(headless=custom_config.headless)
+    b = playwright.chromium.launch(headless=custom_config.is_headless)
     yield b
     b.close()
 
