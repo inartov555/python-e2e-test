@@ -51,8 +51,8 @@ def get_browser(playwright, request):
         raise ValueError(f"browser config param contains incorrect value: {custom_config_global.browser}")
     context = browser.new_context(viewport={"width": width, "height": height})
     page = context.new_page()
-    page.set_default_navigation_timeout(20000)
-    page.set_default_timeout(20000)
+    # page.set_default_navigation_timeout(15000)
+    # page.set_default_timeout(15000)
     request.cls.page = page
     return browser
 

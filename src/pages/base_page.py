@@ -18,7 +18,8 @@ class BasePage:
         self.url = url
 
     def open(self) -> "BasePage":
-        self.page.goto(self.url)
+        self.page.goto(self.url, wait_until="load", timeout=20000)
+        self.page.wait_for_function("document.readyState === 'complete'", timeout=20000)
         return self
 
     def locator(self, selector: str) -> Locator:
