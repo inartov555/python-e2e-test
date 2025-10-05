@@ -47,9 +47,11 @@ class LandingPage(BasePage):
         return self.locator('img[href="/images/assets_DO_NOT_HARDCODE/lox_brand/landing-2x.png"]')
 
     def go_to_signup(self) -> None:
+        self.log.info("Go to the Sign up page")
         self.take_a_screenshot()
         self.signup_link.click()
 
     def expect_loaded(self) -> None:
+        self.log.info("Verifying if the Log in page's landing image is shown")
         self.take_a_screenshot()
-        expect(self.signup_link.or_(self.landing_image)).to_be_visible()
+        expect(self.landing_image).to_be_visible()

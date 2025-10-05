@@ -77,7 +77,7 @@ def timestamped_path(file_name, file_ext, path_to_file=os.getenv("HOST_ARTIFACTS
         path_to_file (str): e.g. /home/user/test_dir/artifacts/
     """
     ts = datetime.utcnow().strftime("%Y%m%d-%H%M%S.%f")
-    screenshot_path = os.path.join(path_to_file, f"{file_name}-{ts}.{file_ext}")
+    screenshot_path = os.path.join(path_to_file, f"{ts}-{file_name}.{file_ext}")
     log.info(f"Screenshot path: {screenshot_path}")
     return screenshot_path
 

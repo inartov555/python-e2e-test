@@ -63,17 +63,21 @@ class HomeFeedPage(BasePage):
         """
         Call this method only if the Home tab is not focused
         """
+        self.log.info("Go to the Home tab")
         self.take_a_screenshot()
         self.home_tab_not_selected.click()
 
     def open_menu_overlay(self) -> None:
+        self.log.info("Open the menu overlay")
         self.take_a_screenshot()
         self.menu_more.click()
 
     def expect_home_tab_not_selected_visible(self) -> None:
+        self.log.info("Verifying if the Home shortcut is visible")
         self.take_a_screenshot()
         expect(self.home_tab_not_selected).to_be_visible()
 
     def expect_feed_visible(self) -> None:
+        self.log.info("Verifying if posts are displayed in the Home page")
         self.take_a_screenshot()
         expect(self.page.locator('article').first).to_be_visible()
