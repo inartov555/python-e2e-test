@@ -27,7 +27,7 @@ else
   echo "Using $INI_CONFIG_FILE ini config file"
 fi
 
-python3 -m pytest -v --tb=short -s --reruns 2 --reruns-delay 2 -k test_landing_links_present --ini-config "$INI_CONFIG_FILE" --html=$HOST_ARTIFACTS/test_report_$(date +%Y-%m-%d_%H-%M-%S).html
+python3 -m pytest -v --tb=short -s --reruns 2 --reruns-delay 2 --ini-config "$INI_CONFIG_FILE" --html=$HOST_ARTIFACTS/test_report_$(date +%Y-%m-%d_%H-%M-%S).html
 # Now, let's deactivate venv
 deactivate
 # Returning to the original project path to be able to run the test again with new changes, if there are any
