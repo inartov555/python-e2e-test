@@ -5,6 +5,7 @@ from playwright.sync_api import Page, Locator, expect
 
 from tools.logger.logger import Logger
 from conftest import timestamped_path
+from src.core.custom_config import custom_config_global
 
 
 class BasePage:
@@ -19,10 +20,14 @@ class BasePage:
         self.page = page
         self.url = url
         self.request_fixture = request
+        self.custom_config = custom_config_global
 
     def take_a_screenshot(self) -> None:
-        test_name = self.request_fixture.node.name
-        self.page.screenshot(path=timestamped_path(test_name, "png"))
+        if self.custom_config.take_screenshot:
+            test_name = self.request_fixture.node.name
+            self.page.screenshot(path=timestamped_path(test_name, "png"))
+        else:
+            self.log.warning("Taking a screenshot is skipped due to a config param take_screenshot = False")
 
     def open(self) -> "BasePage":
         self.page.goto(self.url, wait_until="load", timeout=20000)

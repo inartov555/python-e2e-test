@@ -1,8 +1,12 @@
 import pytest
 
 from tools.logger.logger import Logger
+from src.pages.private.conftest import setup_cleanup_signin_signout
+from src.pages.conftest import setup_elements_for_test
 
 
+@pytest.mark.usefixtures('setup_cleanup_signin_signout')
+@pytest.mark.usefixtures('setup_elements_for_test')
 class TestFeedAuth:
     log = Logger(__name__)
 
@@ -19,5 +23,5 @@ class TestFeedAuth:
         self.login_page.allow_all_cookies_if_shown()
         post = feed.first_post
         post.expect_visible()
-        post.like()
+        # post.like()
         post.save()

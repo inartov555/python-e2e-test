@@ -12,7 +12,7 @@ from tools.logger.logger import Logger
 log = Logger(__name__)
 
 
-@pytest.fixture(autouse=True, scope="function")
+@pytest.fixture(autouse=False, scope="class")
 def setup_elements_for_test(request):
     request.cls.custom_config = custom_config_global
     request.cls.landing_page = LandingPage(request.cls.custom_config.base_url, request.cls.page, request)

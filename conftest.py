@@ -4,7 +4,7 @@ from configparser import ConfigParser, ExtendedInterpolation
 from dataclasses import dataclass
 
 import pytest
-from playwright.sync_api import Playwright, sync_playwright, Browser, BrowserContext, Page
+from playwright.sync_api import Playwright, sync_playwright, Browser, BrowserContext, Page, expect
 
 from src.core.custom_config import custom_config_global
 from tools.logger.logger import Logger
@@ -39,42 +39,22 @@ def fill_in_custom_config_from_ini_config(file_path: str):
     result_dict = {}
     cfg = ConfigParser(interpolation=ExtendedInterpolation())
     cfg.read(file_path)
+    result_dict["action_timeout"] = cfg.get("pytest", "action_timeout")
+    result_dict["navigation_timeout"] = cfg.get("pytest", "navigation_timeout")
+    result_dict["assert_timeout"] = cfg.get("pytest", "assert_timeout")
+    result_dict["take_screenshot"] = cfg.get("pytest", "take_screenshot")
     result_dict["browser"] = cfg.get("pytest", "browser")
     result_dict["base_url"] = cfg.get("pytest", "base_url")
     result_dict["is_headless"] = cfg.getboolean("pytest", "is_headless")
     result_dict["width"] = cfg.getint("pytest", "width")
     result_dict["height"] = cfg.getint("pytest", "height")
+    result_dict["username"] = cfg.get("pytest", "username")
+    result_dict["password"] = cfg.get("pytest", "password")
     custom_config_global.change_variables(**result_dict)
 
 
 def pytest_addoption(parser):
     parser.addoption("--ini-config", action="store", default="pytest.ini", help="The path to the *.ini config file")
-
-
-def get_browser(playwright, request):
-    log.info("Getting a browser basing on the config properties")
-    width = custom_config_global.width
-    height = custom_config_global.height
-    if custom_config_global.browser in ("chromium", "chrome", "msedge"):
-        # Chromium Google Chrome, MS Edge
-        browser = playwright.chromium.launch(headless=custom_config_global.is_headless,
-                                             args=[f"--window-size={width},{height}"])
-    elif custom_config_global.browser in ("firefox"):
-        # Firefox
-        browser = playwright.firefox.launch(headless=custom_config_global.is_headless,
-                                            args=[f"--window-size={width},{height}"])
-    elif custom_config_global.browser in ("webkit", "safari"):
-        # WebKit, Safari
-        browser = playwright.webkit.launch(headless=custom_config_global.is_headless)
-    else:
-        raise ValueError(f"browser config param contains incorrect value: {custom_config_global.browser}")
-    context = browser.new_context(viewport={"width": width, "height": height})
-    page = context.new_page()
-    # page.set_default_navigation_timeout(15000)
-    # page.set_default_timeout(15000)
-    request.cls.page = page
-    log.info(f"{custom_config_global.browser} browser is selected")
-    return browser
 
 
 @pytest.fixture(scope="session")
@@ -102,6 +82,39 @@ def timestamped_path(file_name, file_ext, path_to_file=os.getenv("HOST_ARTIFACTS
     return screenshot_path
 
 
+def get_browser(playwright, request) -> Browser:
+    """
+    Set up a browser and return it
+    """
+    log.info("Getting a browser basing on the config properties")
+    width = custom_config_global.width
+    height = custom_config_global.height
+    if custom_config_global.browser in ("chromium", "chrome", "msedge"):
+        # Chromium Google Chrome, MS Edge
+        browser = playwright.chromium.launch(headless=custom_config_global.is_headless,
+                                             args=[f"--window-size={width},{height}"])
+    elif custom_config_global.browser in ("firefox"):
+        # Firefox
+        browser = playwright.firefox.launch(headless=custom_config_global.is_headless,
+                                            args=[f"--window-size={width},{height}"])
+    elif custom_config_global.browser in ("webkit", "safari"):
+        # WebKit, Safari
+        browser = playwright.webkit.launch(headless=custom_config_global.is_headless)
+    else:
+        raise ValueError(f"browser config param contains incorrect value: {custom_config_global.browser}")
+    context = browser.new_context(viewport={"width": width, "height": height})
+    page = context.new_page()
+    # Setting default timeouts
+    context.set_default_navigation_timeout(custom_config_global.navigation_timeout)
+    context.set_default_timeout(custom_config_global.action_timeout)
+    page.set_default_navigation_timeout(custom_config_global.navigation_timeout)
+    page.set_default_timeout(custom_config_global.action_timeout)
+    expect.set_options(timeout=custom_config_global.assert_timeout)
+    request.cls.page = page
+    log.info(f"{custom_config_global.browser} browser is selected")
+    return browser
+
+
 @pytest.fixture(autouse=True, scope="class")
 def browser_setup(playwright, pytestconfig, request):
     ini_config_file = pytestconfig.getoption("--ini-config")
@@ -109,3 +122,16 @@ def browser_setup(playwright, pytestconfig, request):
     browser = get_browser(playwright, request)
     yield browser
     browser.close()
+
+
+@pytest.fixture(autouse=False, scope="class")
+def setup_cleanup_signin_signout(request):
+    log.info("Setup. Sign in...")
+    request.cls.login_page.open()
+    request.cls.login_page.allow_all_cookies_if_shown()
+    request.cls.login_page.expect_loaded()
+    request.cls.login_page.login(request.cls.login_page.custom_config.username,
+                                 request.cls.login_page.custom_config.password)
+    request.cls.home_page.expect_feed_visible()
+    yield
+    log.info("Cleanup. Sign out")
