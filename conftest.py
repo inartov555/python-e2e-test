@@ -39,9 +39,9 @@ def fill_in_custom_config_from_ini_config(file_path: str):
     result_dict = {}
     cfg = ConfigParser(interpolation=ExtendedInterpolation())
     cfg.read(file_path)
-    result_dict["action_timeout"] = cfg.get("pytest", "action_timeout")
-    result_dict["navigation_timeout"] = cfg.get("pytest", "navigation_timeout")
-    result_dict["assert_timeout"] = cfg.get("pytest", "assert_timeout")
+    result_dict["action_timeout"] = cfg.getfloat("pytest", "action_timeout")
+    result_dict["navigation_timeout"] = cfg.getfloat("pytest", "navigation_timeout")
+    result_dict["assert_timeout"] = cfg.getfloat("pytest", "assert_timeout")
     result_dict["take_screenshot"] = cfg.get("pytest", "take_screenshot")
     result_dict["browser"] = cfg.get("pytest", "browser")
     result_dict["base_url"] = cfg.get("pytest", "base_url")
@@ -135,3 +135,8 @@ def setup_cleanup_signin_signout(request):
     request.cls.home_page.expect_feed_visible()
     yield
     log.info("Cleanup. Sign out")
+
+
+@pytest.fixture(autouse=False, scope="function")
+def inject_test_name(request):
+    return request.node.name

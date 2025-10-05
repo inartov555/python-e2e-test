@@ -24,7 +24,7 @@ class BasePage:
 
     def take_a_screenshot(self) -> None:
         if self.custom_config.take_screenshot:
-            test_name = self.request_fixture.node.name
+            test_name = self.request_fixture.getfixturevalue("inject_test_name")
             self.page.screenshot(path=timestamped_path(test_name, "png"))
         else:
             self.log.warning("Taking a screenshot is skipped due to a config param take_screenshot = False")

@@ -6,7 +6,7 @@ from tools.logger.logger import Logger
 log = Logger(__name__)
 
 
-@pytest.fixture(autouse=False, scope="class")
+@pytest.fixture(autouse=False, scope="function")
 def setup_cleanup_signin_signout(request):
     log.info("Setup. Sign in...")
     request.cls.login_page.open()
@@ -14,6 +14,8 @@ def setup_cleanup_signin_signout(request):
     request.cls.login_page.expect_loaded()
     request.cls.login_page.login(request.cls.login_page.custom_config.username,
                                  request.cls.login_page.custom_config.password)
-    request.cls.home_page.expect_feed_visible()
+    request.cls.home_page.expect_home_tab_not_selected_visible()
+    # Let's update the page for the HomePage
+    request.cls.home_page.page = request.cls.login_page.page
     yield
     log.info("Cleanup. Sign out")
