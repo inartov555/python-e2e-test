@@ -9,6 +9,12 @@ import base64
 """
 It's a temporary solution. We need a compiled program to hide the encryption/decription
 algorithm.
+
+HOW TO USE
+    1. Uncomment the commented out lines in the bottom of the file
+    2. Update data = "YOUR_PASSWORD", set account's password instead of the YOUR_PASSWORD
+    3. Run the script in the terminal like this: python3 temp_encr.py
+    4. Copy the value after [DECRYPTED]
 """
 
 
