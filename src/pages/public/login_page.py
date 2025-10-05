@@ -10,15 +10,16 @@ log = Logger(__name__)
 
 
 class LoginPage(BasePage):
-    def __init__(self, base_url: str, page: Page):
+    def __init__(self, base_url: str, page: Page, request):
         """
         /accounts/login/ - URI path
 
         Args:
             base_url (str): web site URL
             page (playwright.sync_api._generated.Page): page fixture
+            request (_pytest.fixtures.SubRequest): request fixture
         """
-        super().__init__(base_url, "/accounts/login/", page)
+        super().__init__(base_url, "/accounts/login/", page, request)
 
     @property
     def username_input(self) -> Locator:

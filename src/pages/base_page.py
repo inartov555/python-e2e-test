@@ -11,17 +11,20 @@ log = Logger(__name__)
 
 
 class BasePage:
-    def __init__(self, base_url: str, uri_path: str, page: Page):
+    def __init__(self, base_url: str, uri_path: str, page: Page, request):
         """
         Args:
             base_url (str): web site URL
             uri_path (str): e.g. /accounts/login/
             page (playwright.sync_api._generated.Page): page fixture
+            request (_pytest.fixtures.SubRequest): request fixture
         """
         self.base_url = base_url
         self.uri_path = uri_path
         self.full_url = self.base_url + self.uri_path
         self.page = page
+        self.request_fixture = request
+        self.app_config = self.request_fixture.getfixturevalue("app_config")
 
     def open(self) -> "BasePage":
         log.info(f"Opening {self.full_url} URL")

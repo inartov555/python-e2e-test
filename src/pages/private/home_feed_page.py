@@ -15,15 +15,16 @@ class HomeFeedPage(BasePage):
     """
     Authorized Home page
     """
-    def __init__(self, base_url: str, page: Page):
+    def __init__(self, base_url: str, page: Page, request):
         """
         / - URI path
 
         Args:
             base_url (str): web site URL
             page (playwright.sync_api._generated.Page): page fixture
+            request (_pytest.fixtures.SubRequest): request fixture
         """
-        super().__init__(base_url, "/", page)
+        super().__init__(base_url, "/", page, request)
 
     @property
     def home_tab(self) -> Locator:

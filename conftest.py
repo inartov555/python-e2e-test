@@ -115,7 +115,7 @@ def get_browser(playwright, request) -> Browser:
     return browser
 
 
-@pytest.fixture(autouse=True, scope="function")
+@pytest.fixture(autouse=True, scope="class")
 def browser_setup(playwright, pytestconfig, request):
     browser = get_browser(playwright, request)
     yield browser
@@ -124,7 +124,6 @@ def browser_setup(playwright, pytestconfig, request):
 
 @pytest.fixture(autouse=True, scope="function")
 def inject_test_scope_fixture_name(request, page):
-    request.cls.page = page
     _parameters = {"fixture_name": request.fixturename,
                    "current_test_name": request.node.name,
                    "current_node_id": request.node.nodeid}
