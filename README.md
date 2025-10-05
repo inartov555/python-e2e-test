@@ -1,3 +1,6 @@
+# Note:
+!!! This is just an example of the code, this framework cannot be used for testing Instagram or running multiple times !!!
+
 # E2E Test Framework (Python + Pytest + Playwright)
 
 Modern, scalable, and maintainable test framework built with **Pytest** and **Playwright** using **Page Object Model**,
@@ -14,7 +17,7 @@ Copied project folder, run results like logs, etc., are located in: /home/$user_
 Artifacts (run results, logs, etc.) are located in: /home/$user_name/TEST1/workspace/artifact
 
 BEFORE you start tests, you need to fill in https://github.com/inartov555/python-e2e-test/blob/main/pytest.ini parameters.
-
+To set `password` parameter, encrypt account password using https://github.com/inartov555/python-e2e-test/blob/main/tools/temp_encr.py
 
 ## Structure
 
