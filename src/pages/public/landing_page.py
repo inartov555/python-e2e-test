@@ -9,14 +9,15 @@ from tools.logger.logger import Logger
 class LandingPage(BasePage):
     def __init__(self, url: str, page: Page, request):
         """
+        / - URI path
+
         Args:
             url (str): web site URL
             page (playwright.sync_api._generated.Page): page fixture
             request (_pytest.fixtures.SubRequest): request fixture
         """
-        super().__init__(url, page, request)
+        super().__init__(url, "/", page, request)
         self.log = Logger(__name__)
-        self.url = self.url + "/"
 
     @property
     def signup_link(self) -> Locator:
@@ -44,7 +45,7 @@ class LandingPage(BasePage):
 
     @property
     def landing_image(self) -> Locator:
-        return self.locator('img[href="/images/assets_DO_NOT_HARDCODE/lox_brand/landing-2x.png"]')
+        return self.locator('img[src="/images/assets_DO_NOT_HARDCODE/lox_brand/landing-2x.png"]')
 
     def go_to_signup(self) -> None:
         self.log.info("Go to the Sign up page")

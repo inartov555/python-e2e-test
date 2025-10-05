@@ -7,8 +7,10 @@ import pytest
 from playwright.sync_api import Playwright, sync_playwright, Browser, BrowserContext, Page, expect
 
 from src.core.custom_config import custom_config_global
+from src.core.shared_data import shared_data_global
 from tools.temp_encr import decrypt
 from tools.logger.logger import Logger
+from tools.file_utils import FileUtils
 
 
 log = Logger(__name__)
@@ -28,18 +30,29 @@ def add_loggers(request):
     artifacts_folder_default = os.getenv("HOST_ARTIFACTS")
     log_level = "DEBUG"
     log_file_level = "DEBUG"
-    log_file = os.path.join(timestamped_path("pytest", "log", artifacts_folder_default))
+    log_file = os.path.join(FileUtils.timestamped_path("pytest", "log", artifacts_folder_default))
     log.setup_cli_handler(level=log_level)
     log.setup_filehandler(level=log_file_level, file_name=log_file)
     log.info("General loglevel: '{}', File: '{}'".format(log_level, log_file_level))
     log.info("Test logs will be stored: '{}'".format(log_file))
 
 
-def fill_in_custom_config_from_ini_config(file_path: str):
+def validate_custom_config_params(**kwargs) -> None:
+    """
+    Validation of the config parameters
+    """
+    if not kwargs.get("username"):
+        raise ValueError("username parameter is required for tests")
+    if not kwargs.get("password"):
+        raise ValueError("password parameter is required for tests")
+
+
+def fill_in_custom_config_from_ini_config(file_path: str) -> None:
     log.info(f"Reading config properties from '{file_path}' and storing to a data class")
     result_dict = {}
     cfg = ConfigParser(interpolation=ExtendedInterpolation())
     cfg.read(file_path)
+    result_dict["wait_to_handle_capture_manually"] = cfg.getboolean("pytest", "wait_to_handle_capture_manually")
     result_dict["action_timeout"] = cfg.getfloat("pytest", "action_timeout")
     result_dict["navigation_timeout"] = cfg.getfloat("pytest", "navigation_timeout")
     result_dict["assert_timeout"] = cfg.getfloat("pytest", "assert_timeout")
@@ -50,7 +63,9 @@ def fill_in_custom_config_from_ini_config(file_path: str):
     result_dict["width"] = cfg.getint("pytest", "width")
     result_dict["height"] = cfg.getint("pytest", "height")
     result_dict["username"] = cfg.get("pytest", "username")
-    result_dict["password"] = decrypt(cfg.get("pytest", "password"))
+    result_dict["password"] = cfg.get("pytest", "password")
+    validate_custom_config_params(**result_dict)
+    result_dict["password"] = decrypt(result_dict.get("password"))
     custom_config_global.change_variables(**result_dict)
 
 
@@ -60,27 +75,9 @@ def pytest_addoption(parser):
 
 @pytest.fixture(scope="session")
 def screenshot_dir(pytestconfig):
-    # path_from_input_params = pytestconfig.getoption("--screenshot-dir")
     artifacts_folder_default = os.getenv("HOST_ARTIFACTS")
-    # if path_from_input_params:
-    #    path = path_from_input_params
-    # else:
-    #    path = artifacts_folder_default
     os.makedirs(artifacts_folder_default, exist_ok=True)
     return artifacts_folder_default
-
-
-def timestamped_path(file_name, file_ext, path_to_file=os.getenv("HOST_ARTIFACTS")):
-    """
-    Args:
-        file_name (str): e.g. screenshot
-        file_ext (str): file extention, e.g., png
-        path_to_file (str): e.g. /home/user/test_dir/artifacts/
-    """
-    ts = datetime.utcnow().strftime("%Y%m%d-%H%M%S.%f")
-    screenshot_path = os.path.join(path_to_file, f"{ts}-{file_name}.{file_ext}")
-    log.info(f"Screenshot path: {screenshot_path}")
-    return screenshot_path
 
 
 def get_browser(playwright, request) -> Browser:
@@ -139,6 +136,27 @@ def setup_cleanup_signin_signout(request):
 
 
 @pytest.fixture(autouse=True, scope="function")
-def inject_test_scope_fixture_name(request):
-    request.config.cache.set("current_test_name", request.node.name)
-    request.config.cache.set("current_node_id", request.node.nodeid)
+def inject_test_scope_fixture_name(request, page):
+    _parameters = {"fixture_name": request.fixturename,
+                   "current_test_name": request.node.name,
+                   "current_node_id": request.node.nodeid,
+                   "page_obj": page}
+    shared_data_global.change_variables(**_parameters)
+
+
+@pytest.hookimpl(hookwrapper=True, tryfirst=True)
+def pytest_runtest_makereport(item, call):
+    outcome = yield
+    rep = outcome.get_result()
+    if rep.outcome == "failed":
+        try:
+            f_name = ""
+            test_name = shared_data_global.current_test_name
+            page = shared_data_global.page_obj
+            if test_name:
+                f_name = "failure-{}".format(test_name)
+            else:
+                f_name = "failure"
+            page.screenshot(path=FileUtils.timestamped_path(f_name, "png"))
+        except Exception as ex:
+            log.error(f"pytest_runtest_makereport: taking a screen dump failed with: {ex}")

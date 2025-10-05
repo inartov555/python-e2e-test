@@ -9,14 +9,15 @@ from tools.logger.logger import Logger
 class SignupPage(BasePage):
     def __init__(self, url: str, page: Page, request):
         """
+        /accounts/emailsignup/ - URI path
+
         Args:
             url (str): web site URL
             page (playwright.sync_api._generated.Page): page fixture
             request (_pytest.fixtures.SubRequest): request fixture
         """
-        super().__init__(url, page, request)
+        super().__init__(url, "/accounts/emailsignup/", page, request)
         self.log = Logger(__name__)
-        self.url = self.url + "/accounts/emailsignup/"
 
     @property
     def email_or_phone(self) -> Locator:

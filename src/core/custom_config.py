@@ -1,10 +1,12 @@
 from dataclasses import dataclass
 
 from tools.logger.logger import Logger
+from tools.singleton import Singleton
 
 
-@dataclass(frozen=True)
-class CustomConfig:
+@dataclass(frozen=True, slots=True)
+class CustomConfig(metaclass=Singleton):
+    wait_to_handle_capture_manually: bool = None
     action_timeout: int = None
     navigation_timeout: int = None
     assert_timeout: int = None
@@ -17,9 +19,6 @@ class CustomConfig:
     username: str = None
     password: str = None
 
-    def __init__(self):
-        raise NotImplemented("This class is static and so creating a new instance is not allowed")
-
     @staticmethod
     def change_variables(**kwargs):
         """
@@ -31,4 +30,4 @@ class CustomConfig:
             setattr(CustomConfig, key, kwargs[key])
 
 
-custom_config_global = CustomConfig
+custom_config_global = CustomConfig()

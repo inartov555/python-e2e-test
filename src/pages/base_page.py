@@ -4,12 +4,13 @@ from typing import Optional
 from playwright.sync_api import Page, Locator, expect
 
 from tools.logger.logger import Logger
-from conftest import timestamped_path
+from tools.file_utils import FileUtils
 from src.core.custom_config import custom_config_global
+from src.core.shared_data import shared_data_global
 
 
 class BasePage:
-    def __init__(self, url: str, page: Page, request):
+    def __init__(self, url: str, uri_path: str, page: Page, request):
         """
         Args:
             url (str): web site URL
@@ -18,21 +19,24 @@ class BasePage:
         """
         self.log = Logger(__name__)
         self.page = page
-        self.url = url
+        self.base_url = url
+        self.uri_path = uri_path
+        self.full_url = self.base_url + self.uri_path
         self.request_fixture = request
         self.custom_config = custom_config_global
+        self.shared_data = shared_data_global
 
     def take_a_screenshot(self) -> None:
         if self.custom_config.take_screenshot:
-            test_name = self.request_fixture.config.cache.get("current_test_name", default="NONE")
-            self.page.screenshot(path=timestamped_path(test_name, "png"))
+            test_name = self.shared_data.current_test_name
+            self.shared_data.page_obj.screenshot(path=FileUtils.timestamped_path(test_name, "png"))
         else:
             self.log.warning("Taking a screenshot is skipped due to a config param take_screenshot = False")
 
     def open(self) -> "BasePage":
-        self.log.info(f"Opening {self.url} URL")
+        self.log.info(f"Opening {self.full_url} URL")
         self.take_a_screenshot()
-        self.page.goto(self.url, wait_until="load", timeout=20000)
+        self.page.goto(self.full_url, wait_until="load", timeout=20000)
         self.page.wait_for_function("document.readyState === 'complete'", timeout=20000)
         return self
 
