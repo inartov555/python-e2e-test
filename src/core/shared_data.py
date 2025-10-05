@@ -4,8 +4,12 @@ from tools.logger.logger import Logger
 from tools.singleton import Singleton
 
 
-@dataclass(frozen=True, slots=True)
+@dataclass(slots=True)
 class SharedData(metaclass=Singleton):
+    """
+    The data that is placed in this class is retrieved in a function-scoped fixture.
+    We need this data to be available even when test is finished.
+    """
     fixture_name: str = None
     current_test_name: str = None
     current_node_id: str = None

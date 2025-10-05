@@ -6,7 +6,7 @@ from dataclasses import dataclass
 import pytest
 from playwright.sync_api import Playwright, sync_playwright, Browser, BrowserContext, Page, expect
 
-from src.core.custom_config import custom_config_global
+from src.core.app_config import AppConfig
 from src.core.shared_data import shared_data_global
 from tools.temp_encr import decrypt
 from tools.logger.logger import Logger
@@ -37,7 +37,7 @@ def add_loggers(request):
     log.info("Test logs will be stored: '{}'".format(log_file))
 
 
-def validate_custom_config_params(**kwargs) -> None:
+def validate_app_config_params(**kwargs) -> None:
     """
     Validation of the config parameters
     """
@@ -47,11 +47,13 @@ def validate_custom_config_params(**kwargs) -> None:
         raise ValueError("password parameter is required for tests")
 
 
-def fill_in_custom_config_from_ini_config(file_path: str) -> None:
-    log.info(f"Reading config properties from '{file_path}' and storing to a data class")
+@pytest.fixture(scope="session")
+def app_config(pytestconfig) -> AppConfig:
+    ini_config_file = pytestconfig.getoption("--ini-config")
+    log.info(f"Reading config properties from '{ini_config_file}' and storing to a data class")
     result_dict = {}
     cfg = ConfigParser(interpolation=ExtendedInterpolation())
-    cfg.read(file_path)
+    cfg.read(ini_config_file)
     result_dict["wait_to_handle_capture_manually"] = cfg.getboolean("pytest", "wait_to_handle_capture_manually")
     result_dict["action_timeout"] = cfg.getfloat("pytest", "action_timeout")
     result_dict["navigation_timeout"] = cfg.getfloat("pytest", "navigation_timeout")
@@ -64,9 +66,9 @@ def fill_in_custom_config_from_ini_config(file_path: str) -> None:
     result_dict["height"] = cfg.getint("pytest", "height")
     result_dict["username"] = cfg.get("pytest", "username")
     result_dict["password"] = cfg.get("pytest", "password")
-    validate_custom_config_params(**result_dict)
+    validate_app_config_params(**result_dict)
     result_dict["password"] = decrypt(result_dict.get("password"))
-    custom_config_global.change_variables(**result_dict)
+    return AppConfig(**result_dict)
 
 
 def pytest_addoption(parser):
@@ -85,54 +87,40 @@ def get_browser(playwright, request) -> Browser:
     Set up a browser and return it
     """
     log.info("Getting a browser basing on the config properties")
-    width = custom_config_global.width
-    height = custom_config_global.height
-    if custom_config_global.browser in ("chromium", "chrome", "msedge"):
+    app_config = request.getfixturevalue("app_config")
+    width = app_config.width
+    height = app_config.height
+    if app_config.browser in ("chromium", "chrome", "msedge"):
         # Chromium Google Chrome, MS Edge
-        browser = playwright.chromium.launch(headless=custom_config_global.is_headless,
+        browser = playwright.chromium.launch(headless=app_config.is_headless,
                                              args=[f"--window-size={width},{height}"])
-    elif custom_config_global.browser in ("firefox"):
+    elif app_config.browser in ("firefox"):
         # Firefox
-        browser = playwright.firefox.launch(headless=custom_config_global.is_headless,
+        browser = playwright.firefox.launch(headless=app_config.is_headless,
                                             args=[f"--window-size={width},{height}"])
-    elif custom_config_global.browser in ("webkit", "safari"):
+    elif app_config.browser in ("webkit", "safari"):
         # WebKit, Safari
-        browser = playwright.webkit.launch(headless=custom_config_global.is_headless)
+        browser = playwright.webkit.launch(headless=app_config.is_headless)
     else:
-        raise ValueError(f"browser config param contains incorrect value: {custom_config_global.browser}")
+        raise ValueError(f"browser config param contains incorrect value: {app_config.browser}")
     context = browser.new_context(viewport={"width": width, "height": height})
     page = context.new_page()
     # Setting default timeouts
-    context.set_default_navigation_timeout(custom_config_global.navigation_timeout)
-    context.set_default_timeout(custom_config_global.action_timeout)
-    page.set_default_navigation_timeout(custom_config_global.navigation_timeout)
-    page.set_default_timeout(custom_config_global.action_timeout)
-    expect.set_options(timeout=custom_config_global.assert_timeout)
+    context.set_default_navigation_timeout(app_config.navigation_timeout)
+    context.set_default_timeout(app_config.action_timeout)
+    page.set_default_navigation_timeout(app_config.navigation_timeout)
+    page.set_default_timeout(app_config.action_timeout)
+    expect.set_options(timeout=app_config.assert_timeout)
     request.cls.page = page
-    log.info(f"{custom_config_global.browser} browser is selected")
+    log.info(f"{app_config.browser} browser is selected")
     return browser
 
 
 @pytest.fixture(autouse=True, scope="class")
 def browser_setup(playwright, pytestconfig, request):
-    ini_config_file = pytestconfig.getoption("--ini-config")
-    fill_in_custom_config_from_ini_config(ini_config_file)
     browser = get_browser(playwright, request)
     yield browser
     browser.close()
-
-
-@pytest.fixture(autouse=False, scope="class")
-def setup_cleanup_signin_signout(request):
-    log.info("Setup. Sign in...")
-    request.cls.login_page.open()
-    request.cls.login_page.allow_all_cookies_if_shown()
-    request.cls.login_page.expect_loaded()
-    request.cls.login_page.login(request.cls.login_page.custom_config.username,
-                                 request.cls.login_page.custom_config.password)
-    request.cls.home_page.expect_feed_visible()
-    yield
-    log.info("Cleanup. Sign out")
 
 
 @pytest.fixture(autouse=True, scope="function")

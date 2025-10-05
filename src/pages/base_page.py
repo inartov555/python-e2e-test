@@ -5,7 +5,6 @@ from playwright.sync_api import Page, Locator, expect
 
 from tools.logger.logger import Logger
 from tools.file_utils import FileUtils
-from src.core.custom_config import custom_config_global
 from src.core.shared_data import shared_data_global
 
 
@@ -23,11 +22,11 @@ class BasePage:
         self.uri_path = uri_path
         self.full_url = self.base_url + self.uri_path
         self.request_fixture = request
-        self.custom_config = custom_config_global
+        self.app_config = self.request_fixture.getfixturevalue("app_config")
         self.shared_data = shared_data_global
 
     def take_a_screenshot(self) -> None:
-        if self.custom_config.take_screenshot:
+        if self.app_config.take_screenshot:
             test_name = self.shared_data.current_test_name
             self.shared_data.page_obj.screenshot(path=FileUtils.timestamped_path(test_name, "png"))
         else:

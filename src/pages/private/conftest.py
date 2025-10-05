@@ -14,9 +14,9 @@ def setup_cleanup_signin_signout(request):
     request.cls.login_page.open()
     request.cls.login_page.allow_all_cookies_if_shown()
     request.cls.login_page.expect_loaded()
-    request.cls.login_page.login(request.cls.login_page.custom_config.username,
-                                 request.cls.login_page.custom_config.password)
-    if request.cls.login_page.custom_config.wait_to_handle_capture_manually:
+    request.cls.login_page.login(request.cls.login_page.app_config.username,
+                                 request.cls.login_page.app_config.password)
+    if request.cls.login_page.app_config.wait_to_handle_capture_manually:
         log.warning("Wating 120 seconds after logging in to handle email confirmation or capture manually")
         time.sleep(120)
     request.cls.home_page.expect_home_tab_visible()
