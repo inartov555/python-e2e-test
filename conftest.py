@@ -7,7 +7,7 @@ import pytest
 from playwright.sync_api import Playwright, sync_playwright, Browser, BrowserContext, Page, expect
 
 from src.core.app_config import AppConfig
-from src.core.shared_data import shared_data_global
+from src.core.shared_data import SharedData
 from tools.temp_encr import decrypt
 from tools.logger.logger import Logger
 from tools.file_utils import FileUtils
@@ -123,11 +123,11 @@ def browser_setup(playwright, pytestconfig, request):
 
 
 @pytest.fixture(autouse=True, scope="function")
-def inject_test_scope_fixture_name(request, page):
+def shared_data(request, page) -> SharedData:
     _parameters = {"fixture_name": request.fixturename,
                    "current_test_name": request.node.name,
                    "current_node_id": request.node.nodeid}
-    shared_data_global.change_variables(**_parameters)
+    return SharedData(**_parameters)
 
 
 @pytest.hookimpl(hookwrapper=True, tryfirst=True)
