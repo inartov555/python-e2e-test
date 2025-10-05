@@ -15,7 +15,9 @@ class TestFeedAuth:
     def test_feed_shows_posts(self):
         self.home_page.go_to_home_tab()
         self.home_page.expect_feed_visible()
-        self.home_page.first_post.expect_visible()
+        first_post = self.home_page.first_post
+        first_post.scroll_to_element_liked_by()
+        first_post.expect_comment_button_visible()
 
     @pytest.mark.auth
     @pytest.mark.usefixtures('cleanup_unlike_first')

@@ -24,18 +24,8 @@ class HomeFeedPage(BasePage):
         self.url = self.url + "/"
 
     @property
-    def home_tab_active(self) -> Locator:
-        """
-        After it's clicked
-        """
-        return self.page.locator('a[href="/"]').first
-
-    @property
-    def home_tab_not_selected(self) -> Locator:
-        """
-        Before clicking
-        """
-        return self.page.locator('a[href="/?next=%2F"]').first
+    def home_tab(self) -> Locator:
+        return self.page.locator('a[href="/?next=%2F"], a[href="/"]').first
 
     @property
     def first_post(self) -> PostCard:
@@ -65,17 +55,17 @@ class HomeFeedPage(BasePage):
         """
         self.log.info("Go to the Home tab")
         self.take_a_screenshot()
-        self.home_tab_not_selected.click()
+        self.home_tab.click()
 
     def open_menu_overlay(self) -> None:
         self.log.info("Open the menu overlay")
         self.take_a_screenshot()
         self.menu_more.click()
 
-    def expect_home_tab_not_selected_visible(self) -> None:
+    def expect_home_tab_visible(self) -> None:
         self.log.info("Verifying if the Home shortcut is visible")
         self.take_a_screenshot()
-        expect(self.home_tab_not_selected).to_be_visible()
+        expect(self.home_tab).to_be_visible()
 
     def expect_feed_visible(self) -> None:
         self.log.info("Verifying if posts are displayed in the Home page")

@@ -7,6 +7,7 @@ import pytest
 from playwright.sync_api import Playwright, sync_playwright, Browser, BrowserContext, Page, expect
 
 from src.core.custom_config import custom_config_global
+from tools.temp_encr import decrypt
 from tools.logger.logger import Logger
 
 
@@ -49,7 +50,7 @@ def fill_in_custom_config_from_ini_config(file_path: str):
     result_dict["width"] = cfg.getint("pytest", "width")
     result_dict["height"] = cfg.getint("pytest", "height")
     result_dict["username"] = cfg.get("pytest", "username")
-    result_dict["password"] = cfg.get("pytest", "password")
+    result_dict["password"] = decrypt(cfg.get("pytest", "password"))
     custom_config_global.change_variables(**result_dict)
 
 
