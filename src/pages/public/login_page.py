@@ -6,18 +6,19 @@ from ..base_page import BasePage
 from tools.logger.logger import Logger
 
 
+log = Logger(__name__)
+
+
 class LoginPage(BasePage):
-    def __init__(self, url: str, page: Page, request):
+    def __init__(self, base_url: str, page: Page):
         """
         /accounts/login/ - URI path
 
         Args:
-            url (str): web site URL
+            base_url (str): web site URL
             page (playwright.sync_api._generated.Page): page fixture
-            request (_pytest.fixtures.SubRequest): request fixture
         """
-        super().__init__(url, "/accounts/login/", page, request)
-        self.log = Logger(__name__)
+        super().__init__(base_url, "/accounts/login/", page)
 
     @property
     def username_input(self) -> Locator:
@@ -48,25 +49,21 @@ class LoginPage(BasePage):
         return self.page.get_by_text("Sorry, your password was incorrect. Please double-check your password.")
 
     def login(self, username: str, password: str) -> None:
-        self.log.info("Logging in")
-        self.take_a_screenshot()
+        log.info("Logging in")
         self.username_input.fill(username)
         self.password_input.fill(password)
         self.submit_button.click()
 
     def expect_loaded(self) -> None:
-        self.log.info("Verifying if the Log in page is shown")
-        self.take_a_screenshot()
+        log.info("Verifying if the Log in page is shown")
         expect(self.username_input).to_be_visible()
         expect(self.password_input).to_be_visible()
 
     def allow_all_cookies_if_shown(self) -> None:
-        self.log.info("Confirming the allow cookies overlay, if shown")
-        self.take_a_screenshot()
+        log.info("Confirming the allow cookies overlay, if shown")
         if self.allow_all_cookies_button.is_visible():
             self.allow_all_cookies_button.click()
 
     def is_error_login_text_shown(self) -> None:
-        self.log.info("Verifying if error log in text is shown")
-        self.take_a_screenshot()
+        log.info("Verifying if error log in text is shown")
         expect(self.incorrect_login_error_text).to_be_visible()

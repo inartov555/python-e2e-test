@@ -8,21 +8,22 @@ from src.components.menu_overlay import MenuOverlay
 from tools.logger.logger import Logger
 
 
+log = Logger(__name__)
+
+
 class HomeFeedPage(BasePage):
     """
     Authorized Home page
     """
-    def __init__(self, url: str, page: Page, request):
+    def __init__(self, base_url: str, page: Page):
         """
         / - URI path
 
         Args:
-            url (str): web site URL
+            base_url (str): web site URL
             page (playwright.sync_api._generated.Page): page fixture
-            request (_pytest.fixtures.SubRequest): request fixture
         """
-        super().__init__(url, "/", page, request)
-        self.log = Logger(__name__)
+        super().__init__(base_url, "/", page)
 
     @property
     def home_tab(self) -> Locator:
@@ -45,7 +46,6 @@ class HomeFeedPage(BasePage):
 
     @property
     def menu_overlay(self) -> MenuOverlay:
-        self.take_a_screenshot()
         root = self.page.locator('div[role="dialog"]')
         result = MenuOverlay(root, self)
         return result
@@ -54,21 +54,17 @@ class HomeFeedPage(BasePage):
         """
         Call this method only if the Home tab is not focused
         """
-        self.log.info("Go to the Home tab")
-        self.take_a_screenshot()
+        log.info("Go to the Home tab")
         self.home_tab.click()
 
     def open_menu_overlay(self) -> None:
-        self.log.info("Open the menu overlay")
-        self.take_a_screenshot()
+        log.info("Open the menu overlay")
         self.menu_more.click()
 
     def expect_home_tab_visible(self) -> None:
-        self.log.info("Verifying if the Home shortcut is visible")
-        self.take_a_screenshot()
+        log.info("Verifying if the Home shortcut is visible")
         expect(self.home_tab).to_be_visible()
 
     def expect_feed_visible(self) -> None:
-        self.log.info("Verifying if posts are displayed in the Home page")
-        self.take_a_screenshot()
+        log.info("Verifying if posts are displayed in the Home page")
         expect(self.page.locator('article').first).to_be_visible()

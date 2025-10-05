@@ -6,11 +6,13 @@ from tools.logger.logger import Logger
 from src.pages.base_page import BasePage
 
 
+log = Logger(__name__)
+
+
 class PostCard:
     """
     Represents a post in the home page.
     """
-    log = Logger(__name__)
 
     def __init__(self, root: Locator, page_class: BasePage):
         self.root = root
@@ -26,40 +28,34 @@ class PostCard:
         self.liked_by_link.scroll_into_view_if_needed()
 
     def like(self) -> None:
-        self.log.info("Liking a post")
-        self.page_class.take_a_screenshot()
+        log.info("Liking a post")
         expect(self.like_button).to_be_visible()
         self.like_button.dispatch_event("click")
         expect(self.unlike_button).to_be_visible()
 
     def unlike(self) -> None:
-        self.log.info("Unliking a post")
-        self.page_class.take_a_screenshot()
+        log.info("Unliking a post")
         expect(self.unlike_button).to_be_visible()
         self.unlike_button.dispatch_event("click")
         expect(self.like_button).to_be_visible()
 
     def save(self) -> None:
-        self.log.info("Saving a post")
-        self.page_class.take_a_screenshot()
+        log.info("Saving a post")
         expect(self.save_button).to_be_visible()
         self.save_button.click()
         expect(self.remove_button).to_be_visible()
 
     def remove(self) -> None:
-        self.log.info("Removing a post")
-        self.page_class.take_a_screenshot()
+        log.info("Removing a post")
         expect(self.remove_button).to_be_visible()
         self.remove_button.click()
         expect(self.save_button).to_be_visible()
 
     def open_comments(self) -> None:
-        self.log.info("Opening comments")
-        self.page_class.take_a_screenshot()
+        log.info("Opening comments")
         expect(self.comment_button).to_be_visible()
         self.comment_button.dispatch_event("click")
 
     def expect_comment_button_visible(self) -> None:
-        self.log.info("Verifying if comment button is visible")
-        self.page_class.take_a_screenshot()
+        log.info("Verifying if comment button is visible")
         expect(self.comment_button).to_be_visible()

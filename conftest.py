@@ -58,7 +58,6 @@ def app_config(pytestconfig) -> AppConfig:
     result_dict["action_timeout"] = cfg.getfloat("pytest", "action_timeout")
     result_dict["navigation_timeout"] = cfg.getfloat("pytest", "navigation_timeout")
     result_dict["assert_timeout"] = cfg.getfloat("pytest", "assert_timeout")
-    result_dict["take_screenshot"] = cfg.get("pytest", "take_screenshot")
     result_dict["browser"] = cfg.get("pytest", "browser")
     result_dict["base_url"] = cfg.get("pytest", "base_url")
     result_dict["is_headless"] = cfg.getboolean("pytest", "is_headless")
@@ -116,7 +115,7 @@ def get_browser(playwright, request) -> Browser:
     return browser
 
 
-@pytest.fixture(autouse=True, scope="class")
+@pytest.fixture(autouse=True, scope="function")
 def browser_setup(playwright, pytestconfig, request):
     browser = get_browser(playwright, request)
     yield browser
@@ -125,10 +124,10 @@ def browser_setup(playwright, pytestconfig, request):
 
 @pytest.fixture(autouse=True, scope="function")
 def inject_test_scope_fixture_name(request, page):
+    request.cls.page = page
     _parameters = {"fixture_name": request.fixturename,
                    "current_test_name": request.node.name,
-                   "current_node_id": request.node.nodeid,
-                   "page_obj": page}
+                   "current_node_id": request.node.nodeid}
     shared_data_global.change_variables(**_parameters)
 
 
@@ -136,15 +135,3 @@ def inject_test_scope_fixture_name(request, page):
 def pytest_runtest_makereport(item, call):
     outcome = yield
     rep = outcome.get_result()
-    if rep.outcome == "failed":
-        try:
-            f_name = ""
-            test_name = shared_data_global.current_test_name
-            page = shared_data_global.page_obj
-            if test_name:
-                f_name = "failure-{}".format(test_name)
-            else:
-                f_name = "failure"
-            page.screenshot(path=FileUtils.timestamped_path(f_name, "png"))
-        except Exception as ex:
-            log.error(f"pytest_runtest_makereport: taking a screen dump failed with: {ex}")

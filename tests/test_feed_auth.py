@@ -6,8 +6,10 @@ from src.pages.private.conftest import setup_cleanup_signin_signout, cleanup_rem
 from src.pages.conftest import setup_elements_for_test
 
 
+log = Logger(__name__)
+
+
 class TestFeedAuth:
-    log = Logger(__name__)
 
     @pytest.mark.auth
     @pytest.mark.usefixtures('setup_cleanup_signin_signout')

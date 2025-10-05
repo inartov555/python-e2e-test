@@ -6,18 +6,19 @@ from ..base_page import BasePage
 from tools.logger.logger import Logger
 
 
+log = Logger(__name__)
+
+
 class SignupPage(BasePage):
-    def __init__(self, url: str, page: Page, request):
+    def __init__(self, base_url: str, page: Page):
         """
         /accounts/emailsignup/ - URI path
 
         Args:
-            url (str): web site URL
+            base_url (str): web site URL
             page (playwright.sync_api._generated.Page): page fixture
-            request (_pytest.fixtures.SubRequest): request fixture
         """
-        super().__init__(url, "/accounts/emailsignup/", page, request)
-        self.log = Logger(__name__)
+        super().__init__(base_url, "/accounts/emailsignup/", page)
 
     @property
     def email_or_phone(self) -> Locator:
@@ -44,13 +45,11 @@ class SignupPage(BasePage):
         return self.locator('a[href="/accounts/login/?source=auth_switcher"]')
 
     def go_to_login(self) -> None:
-        self.log.info("Go to log in")
-        self.take_a_screenshot()
+        log.info("Go to log in")
         self.login_link.click()
 
     def expect_loaded(self) -> None:
-        self.log.info("Verifying if the Log in screen is shown")
-        self.take_a_screenshot()
+        log.info("Verifying if the Log in screen is shown")
         expect(self.email_or_phone).to_be_visible()
         expect(self.full_name).to_be_visible()
         expect(self.username).to_be_visible()
