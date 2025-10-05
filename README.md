@@ -12,7 +12,7 @@ NOTE: when you start the source run_tests.sh script, it copies the project to ot
 
 To start tests, you need:
 
-Run the run_tests.sh file next way: source run_tests.sh PATH_TO_THE_PROJECT PATH_TO_INI_CONFIG (if you don't pass ini config file, then default one is used [`pytest.ini`](./pytest.ini)). 
+Run the run_tests.sh file next way: `source run_tests.sh PATH_TO_THE_PROJECT PATH_TO_INI_CONFIG` (if you don't pass ini config file, then default one is used [`pytest.ini`](./pytest.ini)). 
 Copied project folder, run results like logs, etc., are located in: /home/$user_name/TEST1/workspace. 
 Artifacts (run results, logs, etc.) are located in: /home/$user_name/TEST1/workspace/artifact
 
