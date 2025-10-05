@@ -137,6 +137,7 @@ def setup_cleanup_signin_signout(request):
     log.info("Cleanup. Sign out")
 
 
-@pytest.fixture(autouse=False, scope="function")
-def inject_test_name(request):
-    return request.node.name
+@pytest.fixture(autouse=True, scope="function")
+def inject_test_scope_fixture_name(request):
+    request.config.cache.set("current_test_name", request.node.name)
+    request.config.cache.set("current_node_id", request.node.nodeid)

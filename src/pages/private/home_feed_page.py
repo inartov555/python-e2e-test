@@ -3,7 +3,8 @@ from __future__ import annotations
 from playwright.sync_api import expect
 
 from ..base_page import BasePage
-from ...components.post_card import PostCard
+from src.components.post_card import PostCard
+from src.components.menu_overlay import MenuOverlay
 from tools.logger.logger import Logger
 
 
@@ -39,7 +40,7 @@ class HomeFeedPage(BasePage):
     @property
     def first_post(self) -> PostCard:
         root = self.page.locator('article').first
-        return PostCard(root)
+        return PostCard(root, self)
 
     @property
     def posts(self) -> list[PostCard]:
@@ -47,12 +48,27 @@ class HomeFeedPage(BasePage):
         count = roots.count()
         return [PostCard(roots.nth(i)) for i in range(count)]
 
+    @property
+    def menu_more(self) -> Locator:
+        return self.page.get_by_text("More").locator("xpath=ancestor::a[@role='link'][1]")
+
+    @property
+    def menu_overlay(self) -> MenuOverlay:
+        self.take_a_screenshot()
+        root = self.page.locator('div[role="dialog"]')
+        result = MenuOverlay(root, self)
+        return result
+
     def go_to_home_tab(self) -> None:
         """
         Call this method only if the Home tab is not focused
         """
         self.take_a_screenshot()
         self.home_tab_not_selected.click()
+
+    def open_menu_overlay(self) -> None:
+        self.take_a_screenshot()
+        self.menu_more.click()
 
     def expect_home_tab_not_selected_visible(self) -> None:
         self.take_a_screenshot()

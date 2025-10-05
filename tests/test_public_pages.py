@@ -1,4 +1,5 @@
 import pytest
+from playwright.sync_api import expect
 
 from tools.logger.logger import Logger
 from src.pages.conftest import setup_elements_for_test
@@ -31,5 +32,4 @@ class TestPublicPages:
         self.login_page.allow_all_cookies_if_shown()
         self.login_page.expect_loaded()
         self.login_page.login("incorrect_user@example.com", "wrong_password")
-        # In real runs, expect an error or captcha; we assert the page attempted submission
-        assert True
+        self.login_page.is_error_login_text_shown()

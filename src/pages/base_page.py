@@ -24,12 +24,13 @@ class BasePage:
 
     def take_a_screenshot(self) -> None:
         if self.custom_config.take_screenshot:
-            test_name = self.request_fixture.getfixturevalue("inject_test_name")
+            test_name = self.request_fixture.config.cache.get("current_test_name", default="NONE")
             self.page.screenshot(path=timestamped_path(test_name, "png"))
         else:
             self.log.warning("Taking a screenshot is skipped due to a config param take_screenshot = False")
 
     def open(self) -> "BasePage":
+        self.take_a_screenshot()
         self.page.goto(self.url, wait_until="load", timeout=20000)
         self.page.wait_for_function("document.readyState === 'complete'", timeout=20000)
         return self

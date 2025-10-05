@@ -42,6 +42,10 @@ class LoginPage(BasePage):
     def allow_all_cookies_button(self) -> Locator:
         return self.locator('button[class="_a9-- _ap36 _asz1"]')
 
+    @property
+    def incorrect_login_error_text(self) -> Locator:
+        return self.page.get_by_text("Sorry, your password was incorrect. Please double-check your password.")
+
     def login(self, username: str, password: str) -> None:
         self.take_a_screenshot()
         self.username_input.fill(username)
@@ -57,3 +61,7 @@ class LoginPage(BasePage):
         self.take_a_screenshot()
         if self.allow_all_cookies_button.is_visible():
             self.allow_all_cookies_button.click()
+
+    def is_error_login_text_shown(self) -> None:
+        self.take_a_screenshot()
+        expect(self.incorrect_login_error_text).to_be_visible()

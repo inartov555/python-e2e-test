@@ -19,3 +19,30 @@ def setup_cleanup_signin_signout(request):
     request.cls.home_page.page = request.cls.login_page.page
     yield
     log.info("Cleanup. Sign out")
+    request.cls.home_page.open()
+    request.cls.home_page.open_menu_overlay()
+    request.cls.home_page.menu_overlay.log_out()
+    request.cls.landing_page.expect_loaded()
+
+
+@pytest.fixture(autouse=False, scope="function")
+def cleanup_remove_first(request):
+    pass
+    yield
+    log.info("Cleanup. Removing the 1st post")
+    request.cls.home_page.go_to_home_tab()
+    first_post = request.cls.home_page.first_post
+    first_post.scroll_to_element_liked_by()
+    first_post.remove()
+
+
+@pytest.fixture(autouse=False, scope="function")
+def cleanup_unlike_first(request):
+    pass
+    yield
+    log.info("Cleanup. Unliking the 1st post")
+    request.cls.home_page.go_to_home_tab()
+    first_post = request.cls.home_page.first_post
+    first_post.scroll_to_element_liked_by()
+    first_post.unlike()
+
