@@ -16,8 +16,8 @@ Run the run_tests.sh file next way: source run_tests.sh PATH_TO_THE_PROJECT PATH
 Copied project folder, run results like logs, etc., are located in: /home/$user_name/TEST1/workspace
 Artifacts (run results, logs, etc.) are located in: /home/$user_name/TEST1/workspace/artifact
 
-BEFORE you start tests, you need to fill in https://github.com/inartov555/python-e2e-test/blob/main/pytest.ini parameters.
-To set `password` parameter, encrypt account password using https://github.com/inartov555/python-e2e-test/blob/main/tools/temp_encr.py
+BEFORE you start tests, you need to fill in [`pytest.ini`](./pytest.ini) parameters.
+To set `password` parameter, encrypt account password using [`tools/temp_encr.py`](./tools/temp_encr.py)
 
 ## Structure
 
