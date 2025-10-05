@@ -12,6 +12,7 @@ log = Logger(__name__)
 class PostCard:
     """
     Represents a post in the home page.
+    Some elements do not support regular click, that's why JS click event was dispatched for them.
     """
 
     def __init__(self, root: Locator, page_class: BasePage):
