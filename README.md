@@ -33,13 +33,14 @@ python-e2e-test/
 
 ## Decisions & Rationale (Summary)
 
-- **Playwright** chosen over Selenium for stability, auto-waits, tracing, and easier parallelism — reduces flakiness and
+- **Playwright** chosen over Selenium for stability, auto-waits, tracing, and easier parallelism — reduces flakiness and 
   keeps PageObjects slim while still SOLID.
-- **Page Object + Components**: complex parts of the feed are encapsulated into a `PostCard` component with clear actions
+- **Page Object + Components**: complex parts of the feed are encapsulated into a `PostCard` component with clear actions 
   (e.g., `like()`, `save()`, `open_comments()`) to favor single responsibility and reusability.
 - **Typing & lint-friendly**: type hints and docstrings added; methods return self or domain objects for fluent usage.
 - **Fixtures**: `browser_context` and `page` fixtures centralize setup/teardown; base_url and viewport are unified (HD).
-- **Capture issue** this issue can be covered by wait_to_handle_capture_manually = true and after that handle it manually
+- **Capture issue** this issue can be covered by wait_to_handle_capture_manually = true and after that handle it manually 
   while test is waiting 120 seconds. I'd say that capture issue will not happen when tests are run just a few times.
+- **Password encryption** It's a good thing to keep sensitive data like password, etc., encrypted to avoid data leakage.
 
 See [`TASK_DESCRIPTION.md`](./TASK_DESCRIPTION.md) for more info.
