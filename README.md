@@ -39,7 +39,7 @@ python-e2e-test/
   (e.g., `like()`, `save()`, `open_comments()`) to favor single responsibility and reusability.
 - **Typing & lint-friendly**: type hints and docstrings added; methods return self or domain objects for fluent usage.
 - **Capcha issue** this issue can be covered by `wait_to_handle_capture_manually = true` and after that handle it manually 
-  while test is waiting 120 seconds. I'd say that capture issue will not happen when tests are run just a few times.
+  while test is waiting 120 seconds. I'd say that Capcha issue will not happen when tests are run just a few times.
 - **Password encryption** It's a good thing to keep sensitive data like password, etc., encrypted to avoid data leakage.
 - **PlaywrightDriver** This adapter was added for dependency inversion. Also, it'll provide abiltiy to easily add unit tests for pages.
 - **Locators with text**: The text needs to be placed to the localization classes later to support different languages
