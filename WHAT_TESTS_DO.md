@@ -37,7 +37,7 @@
         Go to Home.
         Get the first post, scroll it fully into view.
         Confirm the comment button is visible (post is fully loaded/interactive).
-        Perform the action: first_post.like().
+        Perform the action: `first_post.like()`.
      Cleanup: `cleanup_unlike_first` undoes the like so future tests start clean.
 
    - `test_can_save_first_post`
@@ -46,5 +46,5 @@
         Go to Home.
         Get the first post, scroll it into view.
         Confirm the comment button is visible.
-        Perform the action: first_post.save().
+        Perform the action: `first_post.save()`.
      Cleanup: `cleanup_remove_first` removes the saved state afterward.
