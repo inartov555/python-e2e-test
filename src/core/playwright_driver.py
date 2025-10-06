@@ -14,7 +14,7 @@ class PlaywrightDriver(UIDriver):
         return t if t is not None else self.app_config.action_timeout
 
     def goto(self, url: str, wait_until: str, timeout: int) -> None:
-        self.page.goto(url, timeout=self.app_config.action_timeout)
+        self.page.goto(url, wait_until=wait_until, timeout=timeout)
 
     def click(self, sel: str, timeout_ms: Optional[int] = None) -> None:
         self.page.locator(sel).click(timeout=self._timeout(timeout_ms))
