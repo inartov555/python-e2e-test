@@ -1,7 +1,7 @@
-# Note:
+## Note:
 !!! This is just an example of the code, this framework cannot be used for testing Instagram or running multiple times !!!
 
-# E2E Test Framework (Python + Pytest + Playwright)
+## E2E Test Framework (Python + Pytest + Playwright)
 
 Modern, scalable, and maintainable test framework built with **Pytest** and **Playwright** using **Page Object Model**,
 OOP, and SOLID principles.
