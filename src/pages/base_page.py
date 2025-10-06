@@ -5,35 +5,35 @@ from playwright.sync_api import Page, Locator, expect
 
 from tools.logger.logger import Logger
 from tools.file_utils import FileUtils
+from src.core.app_config import AppConfig
+from src.core.playwright_driver import PlaywrightDriver
 
 
 log = Logger(__name__)
 
 
 class BasePage:
-    def __init__(self, base_url: str, uri_path: str, page: Page, request):
+    def __init__(self, app_config: AppConfig, uri_path: str, pw_driver: PlaywrightDriver):
         """
         Args:
-            base_url (str): web site URL
+            app_config (AppConfig): app config passed in ini config file
             uri_path (str): e.g. /accounts/login/
-            page (playwright.sync_api._generated.Page): page fixture
-            request (_pytest.fixtures.SubRequest): request fixture
+            pw_driver (PlaywrightDriver): adapter
         """
-        self.base_url = base_url
+        self.app_config = app_config
+        self.base_url = self.app_config.base_url
         self.uri_path = uri_path
         self.full_url = self.base_url + self.uri_path
-        self.page = page
-        self.request_fixture = request
-        self.app_config = self.request_fixture.getfixturevalue("app_config")
+        self.pw_driver = pw_driver
 
     def open(self) -> "BasePage":
         log.info(f"Opening {self.full_url} URL")
-        self.page.goto(self.full_url, wait_until="load", timeout=20000)
-        self.page.wait_for_function("document.readyState === 'complete'", timeout=20000)
+        self.pw_driver.goto(self.full_url, wait_until="load", timeout=20000)
+        self.pw_driver.wait_for_function("document.readyState === 'complete'", timeout=20000)
         return self
 
     def locator(self, selector: str) -> Locator:
-        return self.page.locator(selector)
+        return self.pw_driver.locator(selector)
 
     def click(self, selector: str) -> None:
         self.locator(selector).click()
@@ -48,6 +48,3 @@ class BasePage:
         loc = self.locator(selector)
         expect(loc).to_be_visible(timeout=timeout)
         return loc
-
-    def assert_url_contains(self, fragment: str) -> None:
-        expect(self.page).to_have_url(lambda u: fragment in u)

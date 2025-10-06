@@ -4,22 +4,23 @@ from playwright.sync_api import Locator, expect
 
 from ..base_page import BasePage
 from tools.logger.logger import Logger
+from src.core.app_config import AppConfig
+from src.core.playwright_driver import PlaywrightDriver
 
 
 log = Logger(__name__)
 
 
 class LoginPage(BasePage):
-    def __init__(self, base_url: str, page: Page, request):
+    def __init__(self, app_config: AppConfig, pw_driver: PlaywrightDriver):
         """
         /accounts/login/ - URI path
 
         Args:
-            base_url (str): web site URL
-            page (playwright.sync_api._generated.Page): page fixture
-            request (_pytest.fixtures.SubRequest): request fixture
+            app_config (AppConfig): app config passed in ini config file
+            pw_driver (PlaywrightDriver): adapter
         """
-        super().__init__(base_url, "/accounts/login/", page, request)
+        super().__init__(app_config, "/accounts/login/", pw_driver)
 
     @property
     def username_input(self) -> Locator:
@@ -47,7 +48,7 @@ class LoginPage(BasePage):
 
     @property
     def incorrect_login_error_text(self) -> Locator:
-        return self.page.get_by_text("Sorry, your password was incorrect. Please double-check your password.")
+        return self.pw_driver.get_by_text("Sorry, your password was incorrect. Please double-check your password.")
 
     def login(self, username: str, password: str) -> None:
         log.info("Logging in")

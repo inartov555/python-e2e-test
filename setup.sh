@@ -73,7 +73,7 @@ echo "Installing module requirements..."
 echo ""
 python3 -m pip install --upgrade pip
 python3 -m pip install -r "$BASE_REQ_FILE"
-playwright install --with-deps
+playwright install
 
 echo "Virtual env set up to: $(pwd)"
 export TEST_VENV=$(pwd)
