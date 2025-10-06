@@ -120,7 +120,7 @@ def get_browser(playwright, request) -> Browser:
     page.set_default_navigation_timeout(app_config.navigation_timeout)
     page.set_default_timeout(app_config.action_timeout)
     expect.set_options(timeout=app_config.assert_timeout)
-    request.cls.page = page
+    request.cls.page = page  # it is needed to pass an acutal page to BasePage objects
     log.info(f"{app_config.browser} browser is selected")
     return browser
 
