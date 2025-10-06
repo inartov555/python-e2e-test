@@ -3,7 +3,7 @@
 **Primary goal:** Demonstrate practical ability to use OOP principles, SOLID, and the Page Object (PO) pattern,
 and to write tests and POs that are easy to maintain for the long term with the ability to scale the framework to hundreds of tests.
 
-**Product:** Desktop web version of Instagram in a browser at HD resolution.
+**Product:** Desktop web version of Instagram in a browser at FULLHD resolution.
 
 **Requirements:**
 
