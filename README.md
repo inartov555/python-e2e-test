@@ -12,10 +12,14 @@ NOTE: when you start the source run_tests.sh script, it copies the project to ot
 
 To start tests, you need:
 
-1. Run `sudo apt-get install libavif16`
-2. Fill in [`pytest.ini`](./pytest.ini) parameters. 
+1. Open as a logged in user: (https://www.instagram.com/accounts/edit/).
+2. Switch the "Show account suggestions on profiles" option OFF.
+3. Follow at least one person who make some posts.
+4. Log out and then log in back.
+5. Open a terminal window and run `sudo apt-get install libavif16`
+6. Fill in [`pytest.ini`](./pytest.ini) parameters. 
    To set `password` parameter, encrypt account password using [`tools/temp_encr.py`](./tools/temp_encr.py).
-3. Run the run_tests.sh file next way: `source run_tests.sh $PATH_TO_THE_PROJECT $PATH_TO_INI_CONFIG` (if you don't pass ini config file, then default one is used [`pytest.ini`](./pytest.ini)). 
+7. Run the `run_tests.sh` file next way: `source run_tests.sh $PATH_TO_THE_PROJECT $PATH_TO_INI_CONFIG` (if you don't pass ini config file, then default one is used [`pytest.ini`](./pytest.ini)). 
    Copied project folder, run results like logs, etc., are located in: `/home/$user_name/TEST1/workspace`. 
    Artifacts (run results, logs, etc.) are located in: `/home/$user_name/TEST1/workspace/artifact`.
 
