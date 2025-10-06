@@ -66,6 +66,9 @@ class LoginPage(BasePage):
         if self.allow_all_cookies_button.is_visible():
             self.allow_all_cookies_button.click()
 
-    def is_error_login_text_shown(self) -> None:
+    def expect_error_login(self) -> None:
+        """
+        Verifying if error test is shown when login failed due to incorrect credentials
+        """
         log.info("Verifying if error log in text is shown")
         expect(self.incorrect_login_error_text).to_be_visible()

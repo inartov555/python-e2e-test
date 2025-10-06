@@ -33,4 +33,4 @@ class TestPublicPages:
         self.login_page.allow_all_cookies_if_shown()
         self.login_page.expect_loaded()
         self.login_page.login("incorrect_user@example.com", "wrong_password")
-        self.login_page.is_error_login_text_shown()
+        self.login_page.expect_error_login()
