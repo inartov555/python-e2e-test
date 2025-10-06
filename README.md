@@ -41,6 +41,7 @@ python-e2e-test/
 - **Capture issue** this issue can be covered by wait_to_handle_capture_manually = true and after that handle it manually 
   while test is waiting 120 seconds. I'd say that capture issue will not happen when tests are run just a few times.
 - **Password encryption** It's a good thing to keep sensitive data like password, etc., encrypted to avoid data leakage.
+- **PlaywrightDriver adapter** was added for dependency inversion. Also, it'll provide abiltiy to easily add unit tests for pages.
 - **Locators with text** The text needs to be placed to the localization classes later to support different languages
 
 See [`TASK_DESCRIPTION.md`](./TASK_DESCRIPTION.md) for more info.
