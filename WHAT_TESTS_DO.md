@@ -1,4 +1,4 @@
-# What tests do
+## What tests do
 
 1. `tests.TestPublicPages`:
    Public, unauthenticated flows of your app: opening the landing page, navigating between Landing → Sign-up → Login, and handling a failed login. The setup_elements_for_test fixture likely injects page objects on the test class (self.landing_page, self.login_page, self.signup_page). Each test dismisses a cookie banner if it appears.
