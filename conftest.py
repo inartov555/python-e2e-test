@@ -56,9 +56,9 @@ def app_config(pytestconfig) -> AppConfig:
     result_dict["wait_to_handle_capture_manually"] = cfg.getboolean("pytest",
                                                                     "wait_to_handle_capture_manually",
                                                                     fallback=False)
-    result_dict["action_timeout"] = cfg.getfloat("pytest", "action_timeout", fallback=15000)
-    result_dict["navigation_timeout"] = cfg.getfloat("pytest", "navigation_timeout", fallback=15000)
-    result_dict["assert_timeout"] = cfg.getfloat("pytest", "assert_timeout", fallback=15000)
+    result_dict["action_timeout"] = cfg.getfloat("pytest", "action_timeout", fallback=15000.0)
+    result_dict["navigation_timeout"] = cfg.getfloat("pytest", "navigation_timeout", fallback=15000.0)
+    result_dict["assert_timeout"] = cfg.getfloat("pytest", "assert_timeout", fallback=15000.0)
     result_dict["browser"] = cfg.get("pytest", "browser", fallback="chrome")
     result_dict["base_url"] = cfg.get("pytest", "base_url", fallback="https://www.instagram.com")
     result_dict["is_headless"] = cfg.getboolean("pytest", "is_headless", fallback=False)
