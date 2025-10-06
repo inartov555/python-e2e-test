@@ -88,22 +88,31 @@ def get_browser(playwright, request) -> Browser:
     """
     log.info("Getting a browser basing on the config properties")
     app_config = request.getfixturevalue("app_config")
-    width = app_config.width
-    height = app_config.height
     if app_config.browser in ("chromium", "chrome", "msedge"):
         # Chromium Google Chrome, MS Edge
+        if app_config.is_headless:
+            args = [f"--window-size={width},{height}"]
+        else:
+            args = []
         browser = playwright.chromium.launch(headless=app_config.is_headless,
-                                             args=[f"--window-size={width},{height}"])
+                                             args=args)
     elif app_config.browser in ("firefox"):
         # Firefox
+        if app_config.is_headless:
+            args = [f"--window-size={width},{height}"]
+        else:
+            args = []
         browser = playwright.firefox.launch(headless=app_config.is_headless,
-                                            args=[f"--window-size={width},{height}"])
+                                            args=args)
     elif app_config.browser in ("webkit", "safari"):
         # WebKit, Safari
         browser = playwright.webkit.launch(headless=app_config.is_headless)
     else:
         raise ValueError(f"browser config param contains incorrect value: {app_config.browser}")
-    context = browser.new_context(viewport={"width": width, "height": height})
+    if app_config.browser in ("webkit", "safari") or not app_config.is_headless:
+        context = browser.new_context(viewport={"width": app_config.width, "height": app_config.height})
+    else:
+        context = browser.new_context(viewport=None)
     page = context.new_page()
     # Setting default timeouts
     context.set_default_navigation_timeout(app_config.navigation_timeout)
@@ -116,7 +125,7 @@ def get_browser(playwright, request) -> Browser:
     return browser
 
 
-@pytest.fixture(autouse=True, scope="class")
+@pytest.fixture(autouse=True, scope="function")
 def browser_setup(playwright, pytestconfig, request):
     browser = get_browser(playwright, request)
     yield browser
