@@ -21,34 +21,14 @@ class LoginPage(BasePage):
             ui_driver (UIDriver): e.g., PlaywrightDriver adapter
         """
         super().__init__(app_config, "/accounts/login/", ui_driver)
-
-    @property
-    def username_input(self) -> Locator:
-        return self.locator('input[name="username"]')
-
-    @property
-    def password_input(self) -> Locator:
-        return self.locator('input[name="password"]')
-
-    @property
-    def submit_button(self) -> Locator:
-        return self.locator('button[type="submit"]')
-
-    @property
-    def error_text(self) -> Locator:
-        return self.locator('[role="alert"], #slfErrorAlert, div:has-text("incorrect")')
-
-    @property
-    def forgot_password_link(self) -> Locator:
-        return self.locator('a[href="/accounts/password/reset/"]')
-
-    @property
-    def allow_all_cookies_button(self) -> Locator:
-        return self.locator('button[class="_a9-- _ap36 _asz1"]')
-
-    @property
-    def incorrect_login_error_text(self) -> Locator:
-        return self.ui_driver.get_by_text("Sorry, your password was incorrect. Please double-check your password.")
+        self.username_input = self.locator('input[name="username"]')
+        self.password_input = self.locator('input[name="password"]')
+        self.submit_button = self.locator('button[type="submit"]')
+        self.error_text = self.locator('[role="alert"], #slfErrorAlert, div:has-text("incorrect")')
+        self.forgot_password_link = self.locator('a[href="/accounts/password/reset/"]')
+        self.allow_all_cookies_button = self.locator('button[class="_a9-- _ap36 _asz1"]')
+        self.incorrect_login_error_text = \
+            self.ui_driver.get_by_text("Sorry, your password was incorrect. Please double-check your password.")
 
     def login(self, username: str, password: str) -> None:
         log.info("Logging in")

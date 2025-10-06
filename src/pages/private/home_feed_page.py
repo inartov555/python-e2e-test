@@ -26,10 +26,8 @@ class HomeFeedPage(BasePage):
             ui_driver (UIDriver): e.g., PlaywrightDriver adapter
         """
         super().__init__(app_config, "/", ui_driver)
-
-    @property
-    def home_tab(self) -> Locator:
-        return self.ui_driver.locator('a[href="/?next=%2F"], a[href="/"]').first
+        self.home_tab = self.ui_driver.locator('a[href="/?next=%2F"], a[href="/"]').first
+        self.menu_more = self.ui_driver.get_by_text("More").locator("xpath=ancestor::a[@role='link'][1]")
 
     @property
     def first_post(self) -> PostCard:
@@ -41,10 +39,6 @@ class HomeFeedPage(BasePage):
         roots = self.ui_driver.locator('article')
         count = roots.count()
         return [PostCard(roots.nth(i)) for i in range(count)]
-
-    @property
-    def menu_more(self) -> Locator:
-        return self.ui_driver.get_by_text("More").locator("xpath=ancestor::a[@role='link'][1]")
 
     @property
     def menu_overlay(self) -> MenuOverlay:

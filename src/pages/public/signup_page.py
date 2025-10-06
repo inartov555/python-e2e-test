@@ -21,30 +21,12 @@ class SignupPage(BasePage):
             ui_driver (UIDriver): e.g., PlaywrightDriver adapter
         """
         super().__init__(app_config, "/accounts/emailsignup/", ui_driver)
-
-    @property
-    def email_or_phone(self) -> Locator:
-        return self.locator('input[name="emailOrPhone"]')
-
-    @property
-    def full_name(self) -> Locator:
-        return self.locator('input[name="fullName"]')
-
-    @property
-    def username(self) -> Locator:
-        return self.locator('input[name="username"]')
-
-    @property
-    def password(self) -> Locator:
-        return self.locator('input[name="password"]')
-
-    @property
-    def submit_button(self) -> Locator:
-        return self.locator('button[type="submit"]')
-
-    @property
-    def login_link(self) -> Locator:
-        return self.locator('a[href="/accounts/login/?source=auth_switcher"]')
+        self.email_or_phone = self.locator('input[name="emailOrPhone"]')
+        self.full_name = self.locator('input[name="fullName"]')
+        self.username = self.locator('input[name="username"]')
+        self.password = self.locator('input[name="password"]')
+        self.submit_button = self.locator('button[type="submit"]')
+        self.login_link = self.locator('a[href="/accounts/login/?source=auth_switcher"]')
 
     def go_to_login(self) -> None:
         log.info("Go to log in")

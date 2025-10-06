@@ -21,34 +21,13 @@ class LandingPage(BasePage):
             ui_driver (UIDriver): e.g., PlaywrightDriver adapter
         """
         super().__init__(app_config, "/", ui_driver)
-
-    @property
-    def signup_link(self) -> Locator:
-        return self.locator('a[href="/accounts/emailsignup/"]')
-
-    @property
-    def username_input(self) -> Locator:
-        return self.locator('input[name="username"]')
-
-    @property
-    def password_input(self) -> Locator:
-        return self.locator('input[name="password"]')
-
-    @property
-    def submit_button(self) -> Locator:
-        return self.locator('button[type="submit"]')
-
-    @property
-    def error_text(self) -> Locator:
-        return self.locator('[role="alert"], #slfErrorAlert, div:has-text("incorrect")')
-
-    @property
-    def forgot_password_link(self) -> Locator:
-        return self.locator('a[href="/accounts/password/reset/"]')
-
-    @property
-    def landing_image(self) -> Locator:
-        return self.locator('img[src="/images/assets_DO_NOT_HARDCODE/lox_brand/landing-2x.png"]')
+        self.signup_link = self.locator('a[href="/accounts/emailsignup/"]')
+        self.username_input = self.locator('input[name="username"]')
+        self.password_input = self.locator('input[name="password"]')
+        self.submit_button = self.locator('button[type="submit"]')
+        self.error_text = self.locator('[role="alert"], #slfErrorAlert, div:has-text("incorrect")')
+        self.forgot_password_link = self.locator('a[href="/accounts/password/reset/"]')
+        self.landing_image = self.locator('img[src="/images/assets_DO_NOT_HARDCODE/lox_brand/landing-2x.png"]')
 
     def go_to_signup(self) -> None:
         log.info("Go to the Sign up page")
