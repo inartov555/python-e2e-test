@@ -7,7 +7,7 @@ from src.components.post_card import PostCard
 from src.components.menu_overlay import MenuOverlay
 from tools.logger.logger import Logger
 from src.core.app_config import AppConfig
-from src.core.playwright_driver import PlaywrightDriver
+from src.core.ui_driver import UIDriver
 
 
 log = Logger(__name__)
@@ -17,38 +17,38 @@ class HomeFeedPage(BasePage):
     """
     Authorized Home page
     """
-    def __init__(self, app_config: AppConfig, pw_driver: PlaywrightDriver):
+    def __init__(self, app_config: AppConfig, ui_driver: UIDriver):
         """
         / - URI path
 
         Args:
             app_config (AppConfig): app config passed in ini config file
-            pw_driver (PlaywrightDriver): adapter
+            ui_driver (UIDriver): e.g., PlaywrightDriver adapter
         """
-        super().__init__(app_config, "/", pw_driver)
+        super().__init__(app_config, "/", ui_driver)
 
     @property
     def home_tab(self) -> Locator:
-        return self.pw_driver.locator('a[href="/?next=%2F"], a[href="/"]').first
+        return self.ui_driver.locator('a[href="/?next=%2F"], a[href="/"]').first
 
     @property
     def first_post(self) -> PostCard:
-        root = self.pw_driver.locator('article').first
+        root = self.ui_driver.locator('article').first
         return PostCard(root, self)
 
     @property
     def posts(self) -> list[PostCard]:
-        roots = self.pw_driver.locator('article')
+        roots = self.ui_driver.locator('article')
         count = roots.count()
         return [PostCard(roots.nth(i)) for i in range(count)]
 
     @property
     def menu_more(self) -> Locator:
-        return self.pw_driver.get_by_text("More").locator("xpath=ancestor::a[@role='link'][1]")
+        return self.ui_driver.get_by_text("More").locator("xpath=ancestor::a[@role='link'][1]")
 
     @property
     def menu_overlay(self) -> MenuOverlay:
-        root = self.pw_driver.locator('div[role="dialog"]')
+        root = self.ui_driver.locator('div[role="dialog"]')
         result = MenuOverlay(root, self)
         return result
 
@@ -69,4 +69,4 @@ class HomeFeedPage(BasePage):
 
     def expect_feed_visible(self) -> None:
         log.info("Verifying if posts are displayed in the Home page")
-        expect(self.pw_driver.locator('article').first).to_be_visible()
+        expect(self.ui_driver.locator('article').first).to_be_visible()

@@ -4,20 +4,20 @@ from playwright.sync_api import Locator, expect
 
 from tools.logger.logger import Logger
 from src.pages.base_page import BasePage
+from src.components.base_component import BaseComponent
 
 
 log = Logger(__name__)
 
 
-class PostCard:
+class PostCard(BaseComponent):
     """
     Represents a post in the home page.
     Some elements do not support regular click, that's why JS click event was dispatched for them.
     """
 
     def __init__(self, root: Locator, page_class: BasePage):
-        self.root = root
-        self.page_class = page_class
+        super().__init__(root, page_class)
         self.like_button = self.root.locator('div[role="button"]:has(svg[aria-label="Like"])').first
         self.unlike_button = self.root.locator('div[role="button"]:has(svg[aria-label="Unlike"])').first
         self.save_button = self.root.locator('div[role="button"]:has(svg[aria-label="Save"])').first

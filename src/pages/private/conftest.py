@@ -21,7 +21,7 @@ def setup_cleanup_signin_signout(request):
         time.sleep(120)
     request.cls.home_page.expect_home_tab_visible()
     # Let's update the page for the HomePage
-    request.cls.home_page.pw_driver = request.cls.login_page.pw_driver
+    request.cls.home_page.ui_driver = request.cls.login_page.ui_driver
     yield
     log.info("Cleanup. Sign out")
     request.cls.home_page.open()

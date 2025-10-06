@@ -6,34 +6,34 @@ from playwright.sync_api import Page, Locator, expect
 from tools.logger.logger import Logger
 from tools.file_utils import FileUtils
 from src.core.app_config import AppConfig
-from src.core.playwright_driver import PlaywrightDriver
+from src.core.ui_driver import UIDriver
 
 
 log = Logger(__name__)
 
 
 class BasePage:
-    def __init__(self, app_config: AppConfig, uri_path: str, pw_driver: PlaywrightDriver):
+    def __init__(self, app_config: AppConfig, uri_path: str, ui_driver: UIDriver):
         """
         Args:
             app_config (AppConfig): app config passed in ini config file
             uri_path (str): e.g. /accounts/login/
-            pw_driver (PlaywrightDriver): adapter
+            ui_driver (UIDriver): e.g., PlaywrightDriver adapter
         """
         self.app_config = app_config
         self.base_url = self.app_config.base_url
         self.uri_path = uri_path
         self.full_url = self.base_url + self.uri_path
-        self.pw_driver = pw_driver
+        self.ui_driver = ui_driver
 
     def open(self) -> "BasePage":
         log.info(f"Opening {self.full_url} URL")
-        self.pw_driver.goto(self.full_url, wait_until="load", timeout=20000)
-        self.pw_driver.wait_for_function("document.readyState === 'complete'", timeout=20000)
+        self.ui_driver.goto(self.full_url, wait_until="load", timeout=20000)
+        self.ui_driver.wait_for_function("document.readyState === 'complete'", timeout=20000)
         return self
 
     def locator(self, selector: str) -> Locator:
-        return self.pw_driver.locator(selector)
+        return self.ui_driver.locator(selector)
 
     def click(self, selector: str) -> None:
         self.locator(selector).click()

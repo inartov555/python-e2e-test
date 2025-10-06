@@ -5,22 +5,22 @@ from playwright.sync_api import Locator, expect
 from ..base_page import BasePage
 from tools.logger.logger import Logger
 from src.core.app_config import AppConfig
-from src.core.playwright_driver import PlaywrightDriver
+from src.core.ui_driver import UIDriver
 
 
 log = Logger(__name__)
 
 
 class LoginPage(BasePage):
-    def __init__(self, app_config: AppConfig, pw_driver: PlaywrightDriver):
+    def __init__(self, app_config: AppConfig, ui_driver: UIDriver):
         """
         /accounts/login/ - URI path
 
         Args:
             app_config (AppConfig): app config passed in ini config file
-            pw_driver (PlaywrightDriver): adapter
+            ui_driver (UIDriver): e.g., PlaywrightDriver adapter
         """
-        super().__init__(app_config, "/accounts/login/", pw_driver)
+        super().__init__(app_config, "/accounts/login/", ui_driver)
 
     @property
     def username_input(self) -> Locator:
@@ -48,7 +48,7 @@ class LoginPage(BasePage):
 
     @property
     def incorrect_login_error_text(self) -> Locator:
-        return self.pw_driver.get_by_text("Sorry, your password was incorrect. Please double-check your password.")
+        return self.ui_driver.get_by_text("Sorry, your password was incorrect. Please double-check your password.")
 
     def login(self, username: str, password: str) -> None:
         log.info("Logging in")
