@@ -3,7 +3,6 @@ Tests for an unauthorized user
 """
 
 import pytest
-from playwright.sync_api import expect
 
 from tools.logger.logger import Logger
 from src.pages.conftest import setup_elements_for_test
