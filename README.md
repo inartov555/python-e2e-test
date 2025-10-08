@@ -26,7 +26,7 @@ To start tests, you need:
 ## Structure
 
 ```
-python-e2e-test/
+python_pytest_playwright_e2e_test/
   src/
     core/          # config, browser, logging, base abstractions
     components/    # reusable UI components (PostCard)
