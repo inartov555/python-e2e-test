@@ -57,10 +57,10 @@ def decrypt(package: str, password: str = PASSWORD) -> str:
     return decr.decode("utf-8")
 
 # pylint: disable-next=pointless-string-statement
-
-data = "MegaBosS19"
+'''
+data = "YOUR_PASSWORD"
 encrypted = encrypt(data)
 decrypted = decrypt(encrypted)
 print(f"[ENCRYPTED] {encrypted}")
 print(f"[DECRYPTED] {decrypted}")
-
+'''
