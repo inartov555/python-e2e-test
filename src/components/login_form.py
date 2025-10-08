@@ -26,13 +26,13 @@ class LoginForm(BaseComponent):
             page_class (BasePage): the page derived from BasePage
         """
         super().__init__(root, page_class)
-        self.username_input = self.locator('input[name="username"]')
-        self.password_input = self.locator('input[name="password"]')
-        self.submit_button = self.locator('button[type="submit"]')
-        self.error_text = self.locator('[role="alert"], #slfErrorAlert, div:has-text("incorrect")')
-        self.forgot_password_link = self.locator('a[href="/accounts/password/reset/"]')
+        self.username_input = self.root.locator('input[name="username"]')
+        self.password_input = self.root.locator('input[name="password"]')
+        self.submit_button = self.root.locator('button[type="submit"]')
+        self.error_text = self.root.locator('[role="alert"], #slfErrorAlert, div:has-text("incorrect")')
+        self.forgot_password_link = self.root.locator('a[href="/accounts/password/reset/"]')
         self.incorrect_login_error_text = \
-            self.ui_driver.get_by_text("Sorry, your password was incorrect. Please double-check your password.")
+            self.page_class.ui_driver.get_by_text("Sorry, your password was incorrect. Please double-check your password.")
 
     def login(self, username: str, password: str) -> None:
         """
