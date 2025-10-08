@@ -17,7 +17,7 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.primitives import hashes
 
 
-PASSWORD = "~!@#$%^&*()_+`1234567890-=[]\\{}|;':\",./<>?"
+PASSWORD = "a;lstrYEDES&^&$&%"
 PBKDF2_ITERS = 200000
 
 
