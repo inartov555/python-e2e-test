@@ -37,3 +37,5 @@ class MenuOverlay(BaseComponent):
         expect(self.logout_elem).to_be_visible()
         self.logout_elem.dispatch_event("click")
         expect(self.logging_out_text).to_be_visible()
+
+    def is_open(self) -> bool: ...

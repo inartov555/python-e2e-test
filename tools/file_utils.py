@@ -26,3 +26,10 @@ class FileUtils:
         screenshot_path = os.path.join(path_to_file, f"{file_name}-{ts}.{file_ext}")
         cls.log.info(f"Screenshot path: {screenshot_path}")
         return screenshot_path
+
+    @staticmethod
+    def ensure_dir(path: str) -> None:
+        """
+        Creating directories forcely
+        """
+        os.makedirs(path, exist_ok=True)

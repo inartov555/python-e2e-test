@@ -25,3 +25,6 @@ class BaseComponent:
         """
         self.root = root
         self.page_class = page_class
+
+    def is_visible(self, timeout: Optional[int] = None) -> bool: ...
+    def wait_for_hidden(self, timeout: Optional[int] = None) -> None: ...
