@@ -35,7 +35,9 @@ jobs:
         run: |
           APP_FILES="$(git ls-files \
             'src/**/*.py' \
+            'src/*.py' \
             'tools/**/*.py' \
+            'tools/*.py' \
             '*.py' \
             ':!tests/**' \
           )" || true
