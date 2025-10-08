@@ -5,7 +5,6 @@ Tests for an authorized user
 import pytest
 
 from tools.logger.logger import Logger
-from src.pages.conftest import setup_elements_for_test
 
 
 log = Logger(__name__)
