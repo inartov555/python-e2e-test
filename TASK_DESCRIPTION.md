@@ -13,8 +13,7 @@ and to write tests and POs that are easy to maintain for the long term with the 
    - https://www.instagram.com/
 
 2. Describe a page for an authenticated user:
-   - https://www.instagram.com/ — focus on describing the elements of the posts feed and methods to work with them;
-     3–4 methods are enough. Other elements/methods for the page can be omitted.
+   - https://www.instagram.com/ — focus on describing the elements of the posts feed and methods to work with them. Other elements/methods for the page can be omitted.
 
 3. Provide up to 5 of the most important tests in your opinion that cover the functionality of the pages above.
 

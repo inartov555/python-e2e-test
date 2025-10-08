@@ -1,3 +1,7 @@
+"""
+conftest.py file
+"""
+
 import os
 from datetime import datetime
 from configparser import ConfigParser, ExtendedInterpolation
@@ -48,6 +52,9 @@ def validate_app_config_params(**kwargs) -> None:
 
 @pytest.fixture(scope="session")
 def app_config(pytestconfig) -> AppConfig:
+    """
+    Set and get AppConfig from ini config
+    """
     ini_config_file = pytestconfig.getoption("--ini-config")
     log.info(f"Reading config properties from '{ini_config_file}' and storing to a data class")
     result_dict = {}
@@ -72,11 +79,17 @@ def app_config(pytestconfig) -> AppConfig:
 
 
 def pytest_addoption(parser):
+    """
+    Supported options
+    """
     parser.addoption("--ini-config", action="store", default="pytest.ini", help="The path to the *.ini config file")
 
 
 @pytest.fixture(scope="session")
-def screenshot_dir(pytestconfig):
+def screenshot_dir(pytestconfig) -> str:
+    """
+    Getting screenshot directory
+    """
     artifacts_folder_default = os.getenv("HOST_ARTIFACTS")
     os.makedirs(artifacts_folder_default, exist_ok=True)
     return artifacts_folder_default
@@ -127,12 +140,9 @@ def get_browser(playwright, request) -> Browser:
 
 @pytest.fixture(autouse=True, scope="function")
 def browser_setup(playwright, pytestconfig, request):
+    """
+    Set the browser driver
+    """
     browser = get_browser(playwright, request)
     yield browser
     browser.close()
-
-
-@pytest.hookimpl(hookwrapper=True, tryfirst=True)
-def pytest_runtest_makereport(item, call):
-    outcome = yield
-    rep = outcome.get_result()

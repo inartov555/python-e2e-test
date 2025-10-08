@@ -48,6 +48,5 @@ python-e2e-test/
 - **PlaywrightDriver** This adapter was added for dependency inversion. Also, it'll provide abiltiy to easily add unit tests for pages.
 - **Locators with text**: The text needs to be placed to the localization classes later to support different languages
 
-See [`TASK_DESCRIPTION.md`](./TASK_DESCRIPTION.md) to get the task description.
-
 See [`WHAT_TESTS_DO.md`](./WHAT_TESTS_DO.md) to get the test description.
+See [`TASK_DESCRIPTION.md`](./TASK_DESCRIPTION.md) to get the test description.

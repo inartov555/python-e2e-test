@@ -1,11 +1,3 @@
-import os
-from cryptography.hazmat.primitives.ciphers.aead import AESGCM
-from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
-from cryptography.hazmat.primitives import hashes
-from base64 import urlsafe_b64encode, urlsafe_b64decode
-import base64
-
-
 """
 It's a temporary solution. We need a compiled program to hide the encryption/decription
 algorithm.
@@ -17,12 +9,22 @@ HOW TO USE:
     4. Copy the value after [ENCRYPTED]
 """
 
+import os
+from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+from cryptography.hazmat.primitives import hashes
+from base64 import urlsafe_b64encode, urlsafe_b64decode
+import base64
+
 
 PASSWORD = "a;lstrYEDES&^&$&%"
 PBKDF2_ITERS = 200000
 
 
 def derive_key(password: str, salt: bytes, iterations: int = PBKDF2_ITERS) -> bytes:
+    """
+    Deriving a key
+    """
     kdf = PBKDF2HMAC(
         algorithm=hashes.SHA256(), length=32, salt=salt, iterations=iterations,
     )
@@ -30,6 +32,9 @@ def derive_key(password: str, salt: bytes, iterations: int = PBKDF2_ITERS) -> by
 
 
 def encrypt(plaintext: str, password: str = PASSWORD) -> str:
+    """
+    Encrypting the text
+    """
     _plaintext = plaintext.encode("utf-8")
     salt = os.urandom(16)  # store this with ciphertext
     key = derive_key(password, salt)
@@ -41,6 +46,9 @@ def encrypt(plaintext: str, password: str = PASSWORD) -> str:
 
 
 def decrypt(package: str, password: str = PASSWORD) -> str:
+    """
+    Decrypting the text
+    """
     _package = base64.b64decode(package.encode("ascii"))
     salt, nonce, ct = _package[:16], _package[16:28], _package[28:]
     key = derive_key(password, salt)

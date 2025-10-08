@@ -1,3 +1,7 @@
+"""
+File utilities
+"""
+
 import os
 from datetime import datetime
 
@@ -5,6 +9,9 @@ from tools.logger.logger import Logger
 
 
 class FileUtils:
+    """
+    File utilities
+    """
     log = Logger(__name__)
 
     @classmethod

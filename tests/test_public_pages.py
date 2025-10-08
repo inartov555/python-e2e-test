@@ -1,3 +1,7 @@
+"""
+Tests for an unauthorized user
+"""
+
 import pytest
 from playwright.sync_api import expect
 
@@ -9,6 +13,9 @@ log = Logger(__name__)
 
 @pytest.mark.usefixtures('setup_elements_for_test')
 class TestPublicPages:
+    """
+    Tests for an unauthorized user
+    """
 
     def test_landing_links_present(self):
         self.landing_page.open()
