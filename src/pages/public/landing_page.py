@@ -37,6 +37,7 @@ class LandingPage(BasePage):
         """
         Log in
         """
+        expect(self.login_form_root).to_be_visible()
         login_form = LoginForm(self.login_form_root, self)
         login_form.login(username, password)
 
@@ -44,6 +45,7 @@ class LandingPage(BasePage):
         """
         Verifying if error test is shown when login failed due to incorrect credentials
         """
+        expect(self.login_form_root).to_be_visible()
         login_form = LoginForm(self.login_form_root, self)
         login_form.expect_error_login()
 

@@ -48,7 +48,7 @@ class HomeFeedPage(BasePage):
         """
         roots = self.ui_driver.locator('article')
         count = roots.count()
-        return [PostCard(roots.nth(i)) for i in range(count)]
+        return [PostCard(roots.nth(i), self) for i in range(count)]
 
     @property
     def menu_overlay(self) -> MenuOverlay:
