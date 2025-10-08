@@ -29,7 +29,7 @@ class LandingPage(BasePage):
             ui_driver (UIDriver): e.g., PlaywrightDriver adapter
         """
         super().__init__(app_config, "/", ui_driver)
-        self.login_form_root = self.locator('form[id="loginForm"')
+        self.login_form_root = self.locator('form[id="loginForm"]')
         self.signup_link = self.locator('a[href="/accounts/emailsignup/"]')
         self.landing_image = self.locator('img[src="/images/assets_DO_NOT_HARDCODE/lox_brand/landing-2x.png"]')
 

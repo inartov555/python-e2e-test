@@ -27,7 +27,7 @@ class LoginPage(BasePage):
             ui_driver (UIDriver): e.g., PlaywrightDriver adapter
         """
         super().__init__(app_config, "/accounts/login/", ui_driver)
-        self.login_form_root = self.locator('form[id="loginForm"')
+        self.login_form_root = self.locator('form[id="loginForm"]')
         self.allow_all_cookies_button = self.locator('button[class="_a9-- _ap36 _asz1"]')
 
     def login(self, username: str, password: str) -> None:
