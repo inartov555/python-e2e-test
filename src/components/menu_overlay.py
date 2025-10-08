@@ -42,4 +42,4 @@ class MenuOverlay(BaseComponent):
         """
         Check if it's open
         """
-        pass
+        return None

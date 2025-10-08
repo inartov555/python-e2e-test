@@ -7,10 +7,10 @@ from __future__ import annotations
 from playwright.sync_api import expect
 
 from tools.logger.logger import Logger
-from ...components.login_form import LoginForm
 from src.core.app_config import AppConfig
 from src.core.ui_driver import UIDriver
 from src.pages.base_page import BasePage
+from src.components.login_form import LoginForm
 
 
 log = Logger(__name__)
