@@ -10,11 +10,11 @@ HOW TO USE:
 """
 
 import os
+import base64
+
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.primitives import hashes
-from base64 import urlsafe_b64encode, urlsafe_b64decode
-import base64
 
 
 PASSWORD = "a;lstrYEDES&^&$&%"

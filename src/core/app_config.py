@@ -8,7 +8,7 @@ from tools.logger.logger import Logger
 
 
 @dataclass(slots=True)
-class AppConfig:
+class AppConfig:  # pylint: disable=too-many-instance-attributes
     """
     App config from ini config file
     """

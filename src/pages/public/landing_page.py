@@ -6,10 +6,11 @@ from __future__ import annotations
 
 from playwright.sync_api import Locator, expect
 
-from ..base_page import BasePage
 from tools.logger.logger import Logger
+from src.components.login_form import LoginForm
 from src.core.app_config import AppConfig
 from src.core.ui_driver import UIDriver
+from src.pages.base_page import BasePage
 
 
 log = Logger(__name__)
@@ -28,13 +29,23 @@ class LandingPage(BasePage):
             ui_driver (UIDriver): e.g., PlaywrightDriver adapter
         """
         super().__init__(app_config, "/", ui_driver)
+        self.login_form_root = self.locator('form[id="loginForm"')
         self.signup_link = self.locator('a[href="/accounts/emailsignup/"]')
-        self.username_input = self.locator('input[name="username"]')
-        self.password_input = self.locator('input[name="password"]')
-        self.submit_button = self.locator('button[type="submit"]')
-        self.error_text = self.locator('[role="alert"], #slfErrorAlert, div:has-text("incorrect")')
-        self.forgot_password_link = self.locator('a[href="/accounts/password/reset/"]')
         self.landing_image = self.locator('img[src="/images/assets_DO_NOT_HARDCODE/lox_brand/landing-2x.png"]')
+
+    def login(self, username: str, password: str) -> None:
+        """
+        Log in
+        """
+        login_form = LoginForm(self.login_form_root, self)
+        login_form.login(username, password)
+
+    def expect_error_login(self) -> None:
+        """
+        Verifying if error test is shown when login failed due to incorrect credentials
+        """
+        login_form = LoginForm(self.login_form_root, self)
+        login_form.expect_error_login()
 
     def go_to_signup(self) -> None:
         """

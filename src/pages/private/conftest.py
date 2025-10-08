@@ -42,7 +42,6 @@ def cleanup_remove_first(request) -> None:
     """
     Cleanup. Removing the 1st post from saved ones
     """
-    pass
     yield
     log.info("Cleanup. Removing the 1st post")
     request.cls.home_page.go_to_home_tab()
@@ -56,7 +55,6 @@ def cleanup_unlike_first(request) -> None:
     """
     Cleanup. Unliking the 1st post
     """
-    pass
     yield
     log.info("Cleanup. Unliking the 1st post")
     request.cls.home_page.go_to_home_tab()

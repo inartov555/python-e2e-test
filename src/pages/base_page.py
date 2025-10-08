@@ -3,12 +3,10 @@ Base methods that can be used by derived pages
 """
 
 from __future__ import annotations
-from typing import Optional
 
-from playwright.sync_api import Page, Locator, expect
+from playwright.sync_api import Locator, expect
 
 from tools.logger.logger import Logger
-from tools.file_utils import FileUtils
 from src.core.app_config import AppConfig
 from src.core.ui_driver import UIDriver
 

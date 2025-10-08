@@ -6,9 +6,9 @@ from __future__ import annotations
 
 from playwright.sync_api import expect
 
-from src.components.post_card import PostCard
-from src.components.menu_overlay import MenuOverlay
 from tools.logger.logger import Logger
+from src.components.menu_overlay import MenuOverlay
+from src.components.post_card import PostCard
 from src.core.app_config import AppConfig
 from src.core.ui_driver import UIDriver
 from src.pages.base_page import BasePage
