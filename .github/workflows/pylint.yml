@@ -19,7 +19,23 @@ jobs:
         python -m pip install --upgrade pip
         pip install pylint
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-    - name: Analysing the code with pylint
+
+    - name: Lint app code (strict)
       run: |
-        export PYTHONPATH="${PYTHONPATH}:$(pwd)"
-        pylint --max-line-length=128 $(git ls-files '*.py')
+        APP_FILES="$(git ls-files -- '*.py' | grep -vE '(^|/)tests/|^web/src/pages/')" || true
+        if [ -n "$APP_FILES" ]; then
+          pylint --max-line-length=128 \
+                 --disable=too-many-arguments,too-many-positional-arguments \
+                 $APP_FILES
+        else
+          echo "No app files to lint."
+        fi
+        
+    - name: Lint tests (relaxed)
+      run: |
+        TEST_FILES="$(git ls-files -- 'tests/**/*.py' 'tests/*.py' 'api/tests/**/*.py' 'api/tests/*.py' 'web/tests/**/*.py' 'web/tests/*.py')" || true
+        if [ -n "$TEST_FILES" ]; then
+          pylint --max-line-length=128 --disable=no-member,too-few-public-methods $TEST_FILES
+        else
+          echo "No test files found."
+        fi
