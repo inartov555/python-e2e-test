@@ -45,7 +45,7 @@ class PostCard(BaseComponent):
         """
         Liking a post
         """
-        info("Liking a post")
+        log.info("Liking a post")
         expect(self.like_button).to_be_visible()
         self.like_button.dispatch_event("click")
         expect(self.unlike_button).to_be_visible()
@@ -54,7 +54,7 @@ class PostCard(BaseComponent):
         """
         Unliking a post
         """
-        info("Unliking a post")
+        log.info("Unliking a post")
         expect(self.unlike_button).to_be_visible()
         self.unlike_button.dispatch_event("click")
         expect(self.like_button).to_be_visible()
@@ -63,7 +63,7 @@ class PostCard(BaseComponent):
         """
         Saving a post
         """
-        info("Saving a post")
+        log.info("Saving a post")
         expect(self.save_button).to_be_visible()
         self.save_button.click()
         expect(self.remove_button).to_be_visible()
