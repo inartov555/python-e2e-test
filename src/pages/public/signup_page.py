@@ -1,3 +1,7 @@
+"""
+Signin page
+"""
+
 from __future__ import annotations
 
 from playwright.sync_api import Locator, expect
@@ -12,6 +16,9 @@ log = Logger(__name__)
 
 
 class SignupPage(BasePage):
+    """
+    Signin page
+    """
     def __init__(self, app_config: AppConfig, ui_driver: UIDriver):
         """
         /accounts/emailsignup/ - URI path
@@ -29,10 +36,16 @@ class SignupPage(BasePage):
         self.login_link = self.locator('a[href="/accounts/login/?source=auth_switcher"]')
 
     def go_to_login(self) -> None:
+        """
+        Go to login
+        """
         log.info("Go to log in")
         self.login_link.click()
 
     def expect_loaded(self) -> None:
+        """
+        Verifying if the Log in screen is shown
+        """
         log.info("Verifying if the Log in screen is shown")
         expect(self.email_or_phone).to_be_visible()
         expect(self.full_name).to_be_visible()

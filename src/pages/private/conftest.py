@@ -1,3 +1,7 @@
+"""
+conftest.py
+"""
+
 import time
 
 import pytest
@@ -9,7 +13,10 @@ log = Logger(__name__)
 
 
 @pytest.fixture(autouse=False, scope="function")
-def setup_cleanup_signin_signout(request):
+def setup_cleanup_signin_signout(request) -> None:
+    """
+    Setup & cleanup. Signin and the sign out
+    """
     log.info("Setup. Sign in...")
     request.cls.login_page.open()
     request.cls.login_page.allow_all_cookies_if_shown()
@@ -31,7 +38,10 @@ def setup_cleanup_signin_signout(request):
 
 
 @pytest.fixture(autouse=False, scope="function")
-def cleanup_remove_first(request):
+def cleanup_remove_first(request) -> None:
+    """
+    Cleanup. Removing the 1st post from saved ones
+    """
     pass
     yield
     log.info("Cleanup. Removing the 1st post")
@@ -42,7 +52,10 @@ def cleanup_remove_first(request):
 
 
 @pytest.fixture(autouse=False, scope="function")
-def cleanup_unlike_first(request):
+def cleanup_unlike_first(request) -> None:
+    """
+    Cleanup. Unliking the 1st post
+    """
     pass
     yield
     log.info("Cleanup. Unliking the 1st post")
@@ -50,4 +63,3 @@ def cleanup_unlike_first(request):
     first_post = request.cls.home_page.first_post
     first_post.scroll_to_element_liked_by()
     first_post.unlike()
-

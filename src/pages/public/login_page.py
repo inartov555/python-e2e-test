@@ -1,3 +1,7 @@
+"""
+Login page
+"""
+
 from __future__ import annotations
 
 from playwright.sync_api import Locator, expect
@@ -12,6 +16,9 @@ log = Logger(__name__)
 
 
 class LoginPage(BasePage):
+    """
+    Login page
+    """
     def __init__(self, app_config: AppConfig, ui_driver: UIDriver):
         """
         /accounts/login/ - URI path
@@ -31,17 +38,26 @@ class LoginPage(BasePage):
             self.ui_driver.get_by_text("Sorry, your password was incorrect. Please double-check your password.")
 
     def login(self, username: str, password: str) -> None:
+        """
+        Log in
+        """
         log.info("Logging in")
         self.username_input.fill(username)
         self.password_input.fill(password)
         self.submit_button.click()
 
     def expect_loaded(self) -> None:
+        """
+        Verifying if the Log in page is shown
+        """
         log.info("Verifying if the Log in page is shown")
         expect(self.username_input).to_be_visible()
         expect(self.password_input).to_be_visible()
 
     def allow_all_cookies_if_shown(self) -> None:
+        """
+        Confirming the allow cookies overlay, if shown
+        """
         log.info("Confirming the allow cookies overlay, if shown")
         if self.allow_all_cookies_button.is_visible():
             self.allow_all_cookies_button.click()

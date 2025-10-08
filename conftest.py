@@ -3,12 +3,9 @@ conftest.py file
 """
 
 import os
-from datetime import datetime
 from configparser import ConfigParser, ExtendedInterpolation
-from dataclasses import dataclass
 
 import pytest
-from playwright.sync_api import Playwright, sync_playwright, Browser, BrowserContext, Page, expect
 
 from src.core.app_config import AppConfig
 from tools.temp_encr import decrypt
@@ -20,7 +17,7 @@ log = Logger(__name__)
 
 
 @pytest.fixture(autouse=True, scope="session")
-def add_loggers(request):
+def add_loggers():
     """
     The fixture to configure loggers
     It uses built-in pytest arguments to configure loggigng level and files
@@ -36,8 +33,8 @@ def add_loggers(request):
     log_file = os.path.join(FileUtils.timestamped_path("pytest", "log", artifacts_folder_default))
     log.setup_cli_handler(level=log_level)
     log.setup_filehandler(level=log_file_level, file_name=log_file)
-    log.info("General loglevel: '{}', File: '{}'".format(log_level, log_file_level))
-    log.info("Test logs will be stored: '{}'".format(log_file))
+    log.info(f"General loglevel: '{log_level}', File: '{log_file_level}'")
+    log.info(f"Test logs will be stored: '{log_file}'")
 
 
 def validate_app_config_params(**kwargs) -> None:
@@ -86,7 +83,7 @@ def pytest_addoption(parser):
 
 
 @pytest.fixture(scope="session")
-def screenshot_dir(pytestconfig) -> str:
+def screenshot_dir() -> str:
     """
     Getting screenshot directory
     """
@@ -100,46 +97,46 @@ def get_browser(playwright, request) -> Browser:
     Set up a browser and return it
     """
     log.info("Getting a browser basing on the config properties")
-    app_config = request.getfixturevalue("app_config")
-    if app_config.browser in ("chromium", "chrome", "msedge"):
+    _app_config = request.getfixturevalue("app_config")
+    if _app_config.browser in ("chromium", "chrome", "msedge"):
         # Chromium Google Chrome, MS Edge
-        if app_config.is_headless:
-            args = [f"--window-size={width},{height}"]
+        if _app_config.is_headless:
+            args = [f"--window-size={_app_config.width},{_app_config.height}"]
         else:
             args = []
-        browser = playwright.chromium.launch(headless=app_config.is_headless,
+        browser = playwright.chromium.launch(headless=_app_config.is_headless,
                                              args=args)
-    elif app_config.browser in ("firefox"):
+    elif _app_config.browser in ("firefox"):
         # Firefox
-        if app_config.is_headless:
-            args = [f"--window-size={width},{height}"]
+        if _app_config.is_headless:
+            args = [f"--window-size={_app_config.width},{_app_config.height}"]
         else:
             args = []
-        browser = playwright.firefox.launch(headless=app_config.is_headless,
+        browser = playwright.firefox.launch(headless=_app_config.is_headless,
                                             args=args)
-    elif app_config.browser in ("webkit", "safari"):
+    elif _app_config.browser in ("webkit", "safari"):
         # WebKit, Safari
-        browser = playwright.webkit.launch(headless=app_config.is_headless)
+        browser = playwright.webkit.launch(headless=_app_config.is_headless)
     else:
-        raise ValueError(f"browser config param contains incorrect value: {app_config.browser}")
-    if app_config.browser in ("webkit", "safari") or not app_config.is_headless:
-        context = browser.new_context(viewport={"width": app_config.width, "height": app_config.height})
+        raise ValueError(f"browser config param contains incorrect value: {_app_config.browser}")
+    if _app_config.browser in ("webkit", "safari") or not _app_config.is_headless:
+        context = browser.new_context(viewport={"width": _app_config.width, "height": _app_config.height})
     else:
         context = browser.new_context(viewport=None)
     page = context.new_page()
     # Setting default timeouts
-    context.set_default_navigation_timeout(app_config.navigation_timeout)
-    context.set_default_timeout(app_config.action_timeout)
-    page.set_default_navigation_timeout(app_config.navigation_timeout)
-    page.set_default_timeout(app_config.action_timeout)
-    expect.set_options(timeout=app_config.assert_timeout)
+    context.set_default_navigation_timeout(_app_config.navigation_timeout)
+    context.set_default_timeout(_app_config.action_timeout)
+    page.set_default_navigation_timeout(_app_config.navigation_timeout)
+    page.set_default_timeout(_app_config.action_timeout)
+    expect.set_options(timeout=_app_config.assert_timeout)
     request.node.stash["page_obj_fresh"] = page  # it is needed to pass an acutal page to BasePage objects
-    log.info(f"{app_config.browser} browser is selected")
+    log.info(f"{_app_config.browser} browser is selected")
     return browser
 
 
 @pytest.fixture(autouse=True, scope="function")
-def browser_setup(playwright, pytestconfig, request):
+def browser_setup(playwright, request):
     """
     Set the browser driver
     """

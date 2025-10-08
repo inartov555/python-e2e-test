@@ -1,3 +1,7 @@
+"""
+conftest.py
+"""
+
 import pytest
 from playwright.sync_api import Playwright, sync_playwright, Browser, BrowserContext, Page
 
@@ -13,7 +17,10 @@ log = Logger(__name__)
 
 
 @pytest.fixture(autouse=False, scope="function")
-def setup_elements_for_test(request, page):
+def setup_elements_for_test(request, page) -> None:
+    """
+    Setting up the object for a test
+    """
     app_config = request.getfixturevalue("app_config")
     page_obj = request.node.stash.get("page_obj_fresh", page)
     request.cls.app_config = app_config

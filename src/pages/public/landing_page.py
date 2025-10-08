@@ -1,3 +1,7 @@
+"""
+Landing page
+"""
+
 from __future__ import annotations
 
 from playwright.sync_api import Locator, expect
@@ -12,6 +16,9 @@ log = Logger(__name__)
 
 
 class LandingPage(BasePage):
+    """
+    Landing page
+    """
     def __init__(self, app_config: AppConfig, ui_driver: UIDriver):
         """
         / - URI path
@@ -30,9 +37,15 @@ class LandingPage(BasePage):
         self.landing_image = self.locator('img[src="/images/assets_DO_NOT_HARDCODE/lox_brand/landing-2x.png"]')
 
     def go_to_signup(self) -> None:
+        """
+        Go to the Sign up page
+        """
         log.info("Go to the Sign up page")
         self.signup_link.click()
 
     def expect_loaded(self) -> None:
+        """
+        Verifying if the Log in page's landing image is shown
+        """
         log.info("Verifying if the Log in page's landing image is shown")
         expect(self.landing_image).to_be_visible()

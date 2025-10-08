@@ -1,3 +1,7 @@
+"""
+App config from ini config file
+"""
+
 from dataclasses import dataclass
 
 from tools.logger.logger import Logger
@@ -5,6 +9,9 @@ from tools.logger.logger import Logger
 
 @dataclass(slots=True)
 class AppConfig:
+    """
+    App config from ini config file
+    """
     wait_to_handle_capture_manually: bool
     action_timeout: int
     navigation_timeout: int
