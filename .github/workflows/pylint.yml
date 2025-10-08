@@ -23,8 +23,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install pylint
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-          # Optional: install your package so absolute imports work via package metadata
-          if [ -f pyproject.toml ] || [ -f setup.cfg ] || [ -f setup.py ]; then pip install -e .; fi
+      
+      - name: Make project importable (PYTHONPATH)
+        run: echo "PYTHONPATH=$GITHUB_WORKSPACE" >> $GITHUB_ENV
 
       - name: Make project importable (PYTHONPATH)
         run: echo "PYTHONPATH=$GITHUB_WORKSPACE" >> $GITHUB_ENV
