@@ -4,7 +4,7 @@ Signin page
 
 from __future__ import annotations
 
-from playwright.sync_api import Locator, expect
+from playwright.sync_api import expect
 
 from tools.logger.logger import Logger
 from src.core.app_config import AppConfig
