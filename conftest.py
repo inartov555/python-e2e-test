@@ -6,6 +6,7 @@ import os
 from configparser import ConfigParser, ExtendedInterpolation
 
 import pytest
+from playwright.sync_api import Browser, expect
 
 from src.core.app_config import AppConfig
 from tools.temp_encr import decrypt

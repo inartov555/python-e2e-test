@@ -4,8 +4,6 @@ App config from ini config file
 
 from dataclasses import dataclass
 
-from tools.logger.logger import Logger
-
 
 @dataclass(slots=True)
 class AppConfig:  # pylint: disable=too-many-instance-attributes
