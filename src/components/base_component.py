@@ -4,7 +4,8 @@ Base methods for derived components
 
 from __future__ import annotations
 
-from playwright.sync_api import Locator, Optional
+from typing import Optional
+from playwright.sync_api import Locator
 
 from tools.logger.logger import Logger
 from src.pages.base_page import BasePage
