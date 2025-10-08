@@ -30,10 +30,10 @@ class BaseComponent:
         """
         Check if element is visible
         """
-        return None  # TODO
+        return None  # TO BE DONE
 
     def wait_for_hidden(self) -> None:
         """
         Wait for element to be hidden
         """
-        return None  # TODO
+        return None  # TO BE DONE
