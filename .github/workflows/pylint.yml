@@ -5,6 +5,8 @@ on: [push]
 jobs:
   lint:
     runs-on: ubuntu-latest
+    env:
+      PYTHONPATH: ${{ github.workspace }}
 
     strategy:
       matrix:
@@ -17,27 +19,20 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
+          cache: "pip"  # speeds up installs
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install pylint
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-      
-      - name: Make project importable (PYTHONPATH)
-        run: echo "PYTHONPATH=$GITHUB_WORKSPACE" >> $GITHUB_ENV
 
-      - name: Make project importable (PYTHONPATH)
-        run: echo "PYTHONPATH=$GITHUB_WORKSPACE" >> $GITHUB_ENV
-
-      # Strict lint for application code (src/, tools/, and top-level .py files), exclude tests
+      # Strict lint for application code (exclude tests)
       - name: Lint app code (strict)
         run: |
           APP_FILES="$(git ls-files \
-            'src/**/*.py' \
-            'src/*.py' \
-            'tools/**/*.py' \
-            'tools/*.py' \
+            'src/**/*.py' 'src/*.py' \
+            'tools/**/*.py' 'tools/*.py' \
             '*.py' \
             ':!tests/**' \
           )" || true
@@ -50,7 +45,7 @@ jobs:
             echo "No application files to lint."
           fi
 
-      # Relaxed lint for tests only
+      # Relaxed lint for tests
       - name: Lint tests (relaxed)
         run: |
           TEST_FILES="$(git ls-files 'tests/**/*.py' 'tests/*.py')" || true
