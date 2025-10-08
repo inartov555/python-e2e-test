@@ -4,7 +4,7 @@ Base methods for derived components
 
 from __future__ import annotations
 
-from playwright.sync_api import Locator, Optional
+from playwright.sync_api import Locator
 
 from tools.logger.logger import Logger
 from src.pages.base_page import BasePage
@@ -26,14 +26,14 @@ class BaseComponent:
         self.root = root
         self.page_class = page_class
 
-    def is_visible(self, timeout: Optional[int] = None) -> bool:
+    def is_visible(self) -> bool:
         """
         Check if element is visible
         """
-        return None
+        return None  # TODO
 
-    def wait_for_hidden(self, timeout: Optional[int] = None) -> None:
+    def wait_for_hidden(self) -> None:
         """
         Wait for element to be hidden
         """
-        return None
+        return None  # TODO
