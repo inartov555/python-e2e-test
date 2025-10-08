@@ -4,8 +4,6 @@ Login page
 
 from __future__ import annotations
 
-from playwright.sync_api import Locator, expect
-
 from tools.logger.logger import Logger
 from src.components.login_form import LoginForm
 from src.core.app_config import AppConfig
@@ -51,8 +49,8 @@ class LoginPage(BasePage):
         Verifying if the Log in page is shown
         """
         log.info("Verifying if the Log in page is shown")
-        expect(self.username_input).to_be_visible()
-        expect(self.password_input).to_be_visible()
+        login_form = LoginForm(self.login_form_root, self)
+        login_form.expect_loaded()
 
     def allow_all_cookies_if_shown(self) -> None:
         """

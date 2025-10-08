@@ -56,7 +56,7 @@ def decrypt(package: str, password: str = PASSWORD) -> str:
     decr = aesgcm.decrypt(nonce, ct, None)
     return decr.decode("utf-8")
 
-
+# pylint: disable-next=pointless-string-statement
 '''
 data = "YOUR_PASSWORD"
 encrypted = encrypt(data)
