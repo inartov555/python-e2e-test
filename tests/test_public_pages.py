@@ -5,9 +5,6 @@ Tests for an unauthorized user
 import pytest
 
 from tools.logger.logger import Logger
-from src.pages.conftest import (
-    setup_elements_for_test  # pylint: disable=unused-import
-)
 
 log = Logger(__name__)
 

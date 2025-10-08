@@ -5,12 +5,6 @@ Tests for an authorized user
 import pytest
 
 from tools.logger.logger import Logger
-# pylint: disable=unused-import
-from src.pages.private.conftest import (
-    setup_cleanup_signin_signout,  # pylint: disable=unused-import
-    cleanup_remove_first,  # pylint: disable=unused-import
-    cleanup_unlike_first  # pylint: disable=unused-import
-)
 from src.pages.conftest import setup_elements_for_test
 
 

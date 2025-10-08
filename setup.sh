@@ -1,27 +1,30 @@
 #!/bin/bash
 
 # Input parameters:
-#   - $1: the path to the project including the project folder name, defaults to $DEFAULT_REPO_PATH
+#   - NONE
 # Exported variables: HOST_ARTIFACTS, ROOT_VENV, TEST_VENV, COPIED_PROJECT_PATH
 
 ARTIFACTS_ROOT_FOLDER="TEST1"
 DEFAULT_REPO_PATH="$HOME/python-e2e-test"
 
 # Repo path defaults to $DEFAULT_REPO_PATH
-if [[ -z "$1" ]]; then
-  echo "WARNING: no path passed for the project, defaulting to $DEFAULT_REPO_PATH"
-  REPO="$DEFAULT_REPO_PATH"
-  if [[ ! -d "$REPO" ]]; then
-    echo "ERROR: Default path $DEFAULT_REPO_PATH for the repo does not exist"
-    return 1
-  fi
-elif [[ ! -d "$1" ]]; then
-  echo "ERROR: Provided path $1 for the repo does not exist"
-  return 1
-else
-  REPO="$1"
-  echo "Using $REPO path for the repo"
-fi
+# if [[ -z "$1" ]]; then
+#  echo "WARNING: no path passed for the project, defaulting to $DEFAULT_REPO_PATH"
+#  REPO="$DEFAULT_REPO_PATH"
+#  if [[ ! -d "$REPO" ]]; then
+#    echo "ERROR: Default path $DEFAULT_REPO_PATH for the repo does not exist"
+#    return 1
+#  fi
+# elif [[ ! -d "$1" ]]; then
+#  echo "ERROR: Provided path $1 for the repo does not exist"
+#  return 1
+# else
+#  REPO="$1"
+#  echo "Using $REPO path for the repo"
+# fi
+
+REPO="$(pwd)"
+echo "REPO = '$REPO'"
 
 # Let's retrieve the project folder name from the path to the project
 PROJECT_FOLDER_NAME="${REPO##*/}"

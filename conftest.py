@@ -17,6 +17,13 @@ from tools.file_utils import FileUtils
 log = Logger(__name__)
 
 
+# Register fixture modules so tests can use them without importing symbols
+pytest_plugins = [
+    "src.pages.conftest",
+    "src.pages.private.conftest",
+]
+
+
 @pytest.fixture(autouse=True, scope="session")
 def add_loggers():
     """
