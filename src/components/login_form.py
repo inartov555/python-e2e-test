@@ -48,7 +48,7 @@ class LoginForm(BaseComponent):
         Verifying if error test is shown when login failed due to incorrect credentials
         """
         log.info("Verifying if error log in text is shown")
-        expect(self.incorrect_login_error_text).to_be_visible()    
+        expect(self.incorrect_login_error_text).to_be_visible()
 
     def expect_loaded(self) -> None:
         """
