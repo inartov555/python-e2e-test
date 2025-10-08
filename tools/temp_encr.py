@@ -17,7 +17,7 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.primitives import hashes
 
 
-PASSWORD = "a;lstrYEDES&^&$&%"
+PASSWORD = "~!@#$%^&*()_+`1234567890-=[]\\{}|;':\",./<>?"
 PBKDF2_ITERS = 200000
 
 
@@ -62,5 +62,6 @@ data = "YOUR_PASSWORD"
 encrypted = encrypt(data)
 decrypted = decrypt(encrypted)
 print(f"[ENCRYPTED] {encrypted}")
+# DECRYPTED line is just for method checking 
 print(f"[DECRYPTED] {decrypted}")
 '''
