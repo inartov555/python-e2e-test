@@ -22,7 +22,7 @@ jobs:
 
     - name: Lint app code (strict)
       run: |
-        APP_FILES="$(git ls-files -- '*.py' | grep -vE '(^|/)tests/|^src/|^tools/')" || true
+        APP_FILES="$(git ls-files -- '*.py' | grep -vE '(^|/)tests/|^src/|^tools/|^*.py')" || true
         if [ -n "$APP_FILES" ]; then
           pylint --max-line-length=128 \
                  --disable=too-many-arguments,too-many-positional-arguments \
@@ -33,7 +33,7 @@ jobs:
         
     - name: Lint tests (relaxed)
       run: |
-        TEST_FILES="$(git ls-files -- 'tests/**/*.py' 'tests/*.py' src/, tools/)" || true
+        TEST_FILES="$(git ls-files -- 'tests/**/*.py' 'tests/*.py' src/ tools/ *.py)" || true
         if [ -n "$TEST_FILES" ]; then
           pylint --max-line-length=128 --disable=no-member,too-few-public-methods $TEST_FILES
         else
