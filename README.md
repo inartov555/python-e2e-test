@@ -1,5 +1,6 @@
-## Note:
-!!! This is just an example of the code, this framework cannot be used for testing Instagram or running multiple times !!!
+## Notes:
+ - !!! This is just an example of the code, this framework cannot be used for testing Instagram or running multiple times !!!
+ - The UI of the web site may change, so tests may not work later
 
 ## E2E Test Framework (Python + Pytest + Playwright)
 
