@@ -12,8 +12,8 @@ fi
 
 DEFAULT_INI_CONFIG_FILE="pytest.ini"
 if [[ -z "$1" ]]; then
-  echo "WARNING: no path passed for the project, defaulting to $COPIED_PROJECT_PATH/$DEFAULT_INI_CONFIG_FILE"
-  INI_CONFIG_FILE="$COPIED_PROJECT_PATH/$DEFAULT_INI_CONFIG_FILE"
+  echo "WARNING: no path passed for the project, defaulting to $DEFAULT_INI_CONFIG_FILE"
+  INI_CONFIG_FILE="$DEFAULT_INI_CONFIG_FILE"
   if [[ ! -f "$INI_CONFIG_FILE" ]]; then
     echo "ERROR: Default path $DEFAULT_INI_CONFIG_FILE for the repo does not exist"
     return 1
