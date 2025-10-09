@@ -5,16 +5,16 @@
 # Exported variables in the setup.sh file: HOST_ARTIFACTS, ROOT_VENV, TEST_VENV, COPIED_PROJECT_PATH
 
 ORIGINAL_PROJECT_PATH="$(pwd)"
-eval source ./setup.sh "$1"
+eval source ./setup.sh
 if [[ $? -ne 0 ]]; then
   return 1
 fi
 
 DEFAULT_INI_CONFIG_FILE="pytest.ini"
 if [[ -z "$1" ]]; then
-  echo "WARNING: no path passed for the project, defaulting to $DEFAULT_INI_CONFIG_FILE"
-  INI_CONFIG_FILE="$DEFAULT_INI_CONFIG_FILE"
-  if [[ ! -d "$INI_CONFIG_FILE" ]]; then
+  echo "WARNING: no path passed for the project, defaulting to $COPIED_PROJECT_PATH/$DEFAULT_INI_CONFIG_FILE"
+  INI_CONFIG_FILE="$COPIED_PROJECT_PATH/$DEFAULT_INI_CONFIG_FILE"
+  if [[ ! -f "$INI_CONFIG_FILE" ]]; then
     echo "ERROR: Default path $DEFAULT_INI_CONFIG_FILE for the repo does not exist"
     return 1
   fi
