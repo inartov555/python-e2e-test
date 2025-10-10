@@ -1,8 +1,8 @@
-## Note:
- - !!! This is just an example of the code; this framework cannot be used for testing Instagram or running multiple times !!!
-
 ## What it is
 Automation framework (example).
+
+## Note:
+ - !!! This is just an example of the code; this framework cannot be used for testing Instagram or running multiple times !!!
 
 ## E2E Test Framework (Python + Pytest + Playwright)
 
