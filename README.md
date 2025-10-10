@@ -49,4 +49,3 @@ python_pytest_playwright_e2e_test/
 - **Locators with text**: The text needs to be placed to the localization classes later to support different languages
 
 See [`WHAT_TESTS_DO.md`](./WHAT_TESTS_DO.md) to get the test description.
-See [`TASK_DESCRIPTION.md`](./TASK_DESCRIPTION.md) to get the test description.
